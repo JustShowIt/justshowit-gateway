@@ -1,0 +1,18 @@
+{
+    "private": true,
+    "organization": "justshowit",
+    "name": "justshowit-gateway",
+    "version": "0.0.1",
+    "description": "Just Show It - Intelligent User Interface",
+    "author": "Mario Linz <gelight@gmx.de>",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js"
+    },
+    "dependencies": {
+        "express": "^4.16.4",
+        "log4js": "^3.0.6",
+        "orm": "^5.0.2",
+        "request-promise": "^4.2.2"
+    }
+}
