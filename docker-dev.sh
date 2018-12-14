@@ -4,13 +4,15 @@ clear
 
 ORGANIZATION=$(node -p -e "require('./package.json').organization")
 SERVICE_NAME=$(node -p -e "require('./package.json').name")
+DOCKER_EXPOSE_PORT=$(node -p -e "require('./package.json').docker.expose")
+SERVER_PORT=$(node -p -e "require('./package.json').server.port")
 
 build() {
-    docker build --label "$ORGANIZATION/$SERVICE_NAME" -t $ORGANIZATION/$SERVICE_NAME .
+    docker build --build-arg DOCKER_EXPOSE_PORT=$DOCKER_EXPOSE_PORT --label "$ORGANIZATION/$SERVICE_NAME" -t $ORGANIZATION/$SERVICE_NAME .
 }
 
 run() {
-    docker run --name $SERVICE_NAME -p 3001:9001 -d $ORGANIZATION/$SERVICE_NAME
+    docker run --name $SERVICE_NAME -p $DOCKER_EXPOSE_PORT:$SERVER_PORT -d $ORGANIZATION/$SERVICE_NAME
 }
 
 delete() {

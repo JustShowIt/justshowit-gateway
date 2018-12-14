@@ -1,5 +1,8 @@
 FROM node:11.3.0
 
+ARG DOCKER_EXPOSE_PORT
+ENV DOCKER_EXPOSE_PORT $DOCKER_EXPOSE_PORT
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -15,6 +18,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 9001
+EXPOSE $DOCKER_EXPOSE_PORT
 
 CMD [ "npm", "start" ]

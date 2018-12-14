@@ -14,5 +14,11 @@
         "log4js": "^3.0.6",
         "orm": "^5.0.2",
         "request-promise": "^4.2.2"
+    },
+    "server": {
+        "port": 9000
+    },
+    "docker": {
+        "expose": 3000
     }
 }
