@@ -5,6 +5,7 @@ const router = require('./router');
 
 const app = express();
 // app.use(orm.express(dbPath, dbConfig));
+app.use(express.static(ServiceConfig.justshowitUiBaseApplicationPath));
 
 router(app);
 

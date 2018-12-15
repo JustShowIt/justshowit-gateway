@@ -1,6 +1,7 @@
 const model = require('./model');
 const ServiceConfig = require('./service-config.js');
 const request = require('request-promise');
+const fs = require('fs');
 
 module.exports = {
     async getTest (req, res) {
@@ -16,7 +17,7 @@ module.exports = {
                 console.log(ServiceConfig.userInterfaceServiceUrl);
                 
                 request({
-                    url: ServiceConfig.userInterfaceServiceUrl,
+                    uri: ServiceConfig.userInterfaceServiceUrl,
                     method: 'POST',
                     headers: {
                         'content-type': 'text/html'
@@ -38,5 +39,15 @@ module.exports = {
         } catch  (e) {
             res.status(500).end(e);
         }
+    },
+
+    async getUiBaseApplication (req, res) {
+
+        let html = fs.readFileSync(ServiceConfig.justshowitUiBaseApplicationPath + 'index.html', (err, html) => {
+            console.log(err, html);
+        });
+
+        res.set('Content-Type', 'text/html');
+        res.send(new Buffer.alloc(html.length, html));
     }
 }
