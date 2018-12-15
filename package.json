@@ -7,7 +7,7 @@
     "author": "Mario Linz <gelight@gmx.de>",
     "main": "src/server.js",
     "scripts": {
-        "start": "node src/server.js"
+        "start": "npm link justshowit-ui-base-application && node src/server.js"
     },
     "dependencies": {
         "express": "^4.16.4",

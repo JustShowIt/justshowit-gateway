@@ -1,53 +1,39 @@
-const model = require('./model');
+// const model = require('./model');
 const ServiceConfig = require('./service-config.js');
-const request = require('request-promise');
+// const request = require('request-promise');
 const fs = require('fs');
+const path = require('path');
 
 module.exports = {
+    
+    /*
     async getTest (req, res) {
         try {
             
             const descriptionJson = await model.getTest();
-
-            if (req.get('user-interface-id')) {
-
-                res.json(descriptionJson);
-
-            } else {
-                console.log(ServiceConfig.userInterfaceServiceUrl);
-                
-                request({
-                    uri: ServiceConfig.userInterfaceServiceUrl,
-                    method: 'POST',
-                    headers: {
-                        'content-type': 'text/html'
-                    }, 
-                    body: {
-                        host: req.hostname,
-                        description: descriptionJson
-                    },
-                    json: true
-                }).then(html => {
-                    
-                    res.set('Content-Type', 'text/html');
-                    res.send(new Buffer.alloc(html.length, html));
-
-                }).catch(e => res.send(e));
-                
-            }
+            res.json(descriptionJson);
             
         } catch  (e) {
             res.status(500).end(e);
         }
     },
+    */
 
     async getUiBaseApplication (req, res) {
-
-        let html = fs.readFileSync(ServiceConfig.justshowitUiBaseApplicationPath + 'index.html', (err, html) => {
-            console.log(err, html);
+        
+        let justshowitUiBaseApplicationPath = path.join(__dirname, '..', ServiceConfig.justshowitUiBaseApplicationPath);
+        fs.readFileSync(justshowitUiBaseApplicationPath + 'index.html').then(content => {
+            res.set('Content-Type', 'text/html');
+            res.send(new Buffer.alloc(content.length, content));
+            res.end();
+        }).catch(e => {
+            console.error(e);
         });
 
-        res.set('Content-Type', 'text/html');
-        res.send(new Buffer.alloc(html.length, html));
+    },
+
+    async serviceRequest (req, res) {
+        console.log('justshowme-service-request-uri', req.get('justshowme-service-request-uri'));
+        res.end();
     }
 }
