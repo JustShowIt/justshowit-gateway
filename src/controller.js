@@ -21,12 +21,12 @@ module.exports = {
 
     async getServiceRequest (req, res) {
         
-        console.log('')
-        console.log('Header "justshowme-service-request-uri" found. Sub-Request (GET) called to', req.get('justshowme-service-request-uri'));
-
-        if (req.get('justshowme-service-request-uri')) {
+        const justshowmeServiceRequestUri = req.get('justshowme-service-request-uri');
+        
+        if (justshowmeServiceRequestUri && justshowmeServiceRequestUri.length > 7) {
+            console.log('Header -justshowme-service-request-uri- found. GET - ' + req.get('justshowme-service-request-uri'));
             request({
-                uri: req.get('justshowme-service-request-uri'),
+                uri: justshowmeServiceRequestUri,
                 headers: {
                     "content-type": 'application/json'
                 },
@@ -44,11 +44,10 @@ module.exports = {
 
     async postServiceRequest (req, res) {
         
-        console.log('')
-        console.log('Header "justshowme-service-request-uri" found. Sub-Request (POST) called to', req.get('justshowme-service-request-uri'));
-        console.log('Request Data:', req.body);
-
-        if (req.get('justshowme-service-request-uri')) {
+        const justshowmeServiceRequestUri = req.get('justshowme-service-request-uri');
+        
+        if (justshowmeServiceRequestUri && justshowmeServiceRequestUri.length > 7) {
+            console.log('Header -justshowme-service-request-uri- found. POST - ' + req.get('justshowme-service-request-uri'));
             request({
                 uri: req.get('justshowme-service-request-uri'),
                 body: req.body,
