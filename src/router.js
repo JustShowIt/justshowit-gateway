@@ -5,5 +5,5 @@ module.exports = (app) => {
     app.get('/justshowme', controller.getServiceRequest);
     app.post('/justshowme', controller.postServiceRequest);
     
-    app.get('/muh', controller.muh);
+    app.get('/test', controller.getTestJson);
 }
