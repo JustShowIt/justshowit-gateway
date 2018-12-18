@@ -22,6 +22,7 @@ module.exports = {
     async getServiceRequest (req, res) {
         
         const justshowmeServiceRequestUri = req.get('justshowme-service-request-uri');
+        res.header('Content-Type', 'application/json');
         
         if (justshowmeServiceRequestUri && justshowmeServiceRequestUri.length > 7) {
             console.log('Header -justshowme-service-request-uri- found. GET - ' + req.get('justshowme-service-request-uri'));
@@ -31,15 +32,17 @@ module.exports = {
                     "content-type": 'application/json'
                 },
                 json: true
-            }).then(function (json) {
-                console.log(json);
+            }).then((json) => {
+                console.error(json);
+                res.json(json);
+                res.end();
             })
-            .catch(function (e) {
+            .catch((e) => {
                 console.error(e);
+                res.end();
             });
         }
 
-        res.end();
     },
 
     async postServiceRequest (req, res) {
@@ -56,14 +59,16 @@ module.exports = {
                 },
                 json: true
             }).then(function (json) {
-                console.log(json);
+                console.error(json);
+                res.json(json);
+                res.end();
             })
             .catch(function (e) {
                 console.error(e);
+                res.end();
             });
         }
 
-        res.end();
     },
 
     async getTestJson (req, res) {
