@@ -11,6 +11,7 @@
         "dev": "npm link justshowit-ui-base-application && npm start"
     },
     "dependencies": {
+        "brain.js": "^1.6.1",
         "express": "^4.16.4",
         "log4js": "^3.0.6",
         "orm": "^5.0.2",
