@@ -34,8 +34,9 @@ module.exports = {
                 },
                 json: true
             }).then((json) => {
-                console.error(json);
                 let analyzedJson = analyse.analyzeMatchingComponentTypes(json);
+                console.clear();
+                console.log(analyzedJson);
                 res.json(analyzedJson);
                 res.end();
             })
@@ -61,7 +62,7 @@ module.exports = {
                 },
                 json: true
             }).then(function (json) {
-                console.error(json);
+                console.log(json);
                 res.json(json);
                 res.end();
             })
