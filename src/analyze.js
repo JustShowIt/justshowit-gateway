@@ -10,9 +10,6 @@ neuronalNetwork.train([
         'text': 'abc'
     }, output: { text: 1 } },
     { input: {
-        "path": 'http://'
-    }, output: { link: 1 } },
-    { input: {
         "path": 'https://'
     }, output: { link: 1 } },
     { input: {
@@ -24,6 +21,10 @@ neuronalNetwork.train([
 
 const analyseByNeuronalNetwork = (unit) => {
     
+    if (!unit.createdDate) {        
+        unit.createdDate = new Date();
+    }
+
     if (!unit.type && !availableComponentTypes.includes(unit.type)) {        
         
         console.log('');
@@ -31,8 +32,9 @@ const analyseByNeuronalNetwork = (unit) => {
         console.log('');
         console.log('');
         console.log('>', unit.id, unit.type);
+        console.log(JSON.stringify(unit));
         
-        const output = neuronalNetwork.run(unit.options, neuronalNetwork);
+        const output = neuronalNetwork.run(unit.options);
         // unit.type = "MUH";
         
         console.log(output);
