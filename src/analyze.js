@@ -1,44 +1,56 @@
 const brain = require('brain.js');
 
-const neuronalNetwork = new brain.recurrent.LSTM();
+const availableComponentTypes = ["text","video","textfield","link","image","article"];
 
-const analyse = (unit) => {
+// const neuronalNetwork = new brain.recurrent.LSTM();
+const neuronalNetwork = new brain.NeuralNetwork();
+
+neuronalNetwork.train([
+    { input: {
+        'text': 'abc'
+    }, output: { text: 1 } },
+    { input: {
+        "path": 'http://'
+    }, output: { link: 1 } },
+    { input: {
+        "path": 'https://'
+    }, output: { link: 1 } },
+    { input: {
+        "path": 'mp4'
+    }, output: { video: 1 } }
+], {
+    iterations: 100,
+});
+
+const analyseByNeuronalNetwork = (unit) => {
     
-    console.log('>>>', unit.id, unit.type);
-    
-    //unit.type = "MUH";
-    
-    // Wenn kein Type gesetzt ist, dann eine Analyse mit dem NeuralenNetzwerk starten und entsprechend pasenden Typ setzten
-    
+    if (!unit.type && !availableComponentTypes.includes(unit.type)) {        
+        
+        console.log('');
+        console.log('');
+        console.log('');
+        console.log('');
+        console.log('>', unit.id, unit.type);
+        
+        const output = neuronalNetwork.run(unit.options, neuronalNetwork);
+        // unit.type = "MUH";
+        
+        console.log(output);
+
+    }
+
     if (unit.units && unit.units.length) {
         unit.units.map(unit => {
-            unit = analyse(unit);
+            unit = analyseByNeuronalNetwork(unit);
         });
     }
 
     return unit;
-
 }
 
 module.exports = {
     async analyzeMatchingComponentTypes (json) {
-            
-        const analyzedJson = await analyse(json);
+        const analyzedJson = await analyseByNeuronalNetwork(json);
         return analyzedJson;
-
-        /*neuronalNetwork.train([
-            { input: [0,0,0], output: 'NO' },
-            { input: [0,0,1], output: 'NO' },
-            { input: [0,1,1], output: 'NO' },
-            { input: [1,0,1], output: 'YES' },
-            { input: [1,1,1], output: 'YES' }
-        ], {
-            iterations: 100
-        });
-
-        const output = net.run([1,0,0]);
-        console.log(`Output: ${output}`);
-        */
-
     }
 }
