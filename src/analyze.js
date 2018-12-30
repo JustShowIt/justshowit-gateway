@@ -1,33 +1,44 @@
 const brain = require('brain.js');
 
-module.exports = {
-    analyzeMatchingComponentTypes (json) {
+const neuronalNetwork = new brain.recurrent.LSTM();
 
-        /*
-        const net = new brain.recurrent.LSTM();
-
-        net.trainAsync([
-            {
-                input: 'I feel great about the world!', 
-                output: 'happy'
-            },
-            {
-                input: 'The world is a terrible place!',
-                output: 'sad'
-            }
-        ]).then(net => {
-            const output = net.run('I feel great');
-            console.log(output);
-        }).catch(e => {
-            console.errot(e);
+const analyse = (unit) => {
+    
+    console.log('>>>', unit.id, unit.type);
+    
+    //unit.type = "MUH";
+    
+    // Wenn kein Type gesetzt ist, dann eine Analyse mit dem NeuralenNetzwerk starten und entsprechend pasenden Typ setzten
+    
+    if (unit.units && unit.units.length) {
+        unit.units.map(unit => {
+            unit = analyse(unit);
         });
-        return json;
+    }
+
+    return unit;
+
+}
+
+module.exports = {
+    async analyzeMatchingComponentTypes (json) {
+            
+        const analyzedJson = await analyse(json);
+        return analyzedJson;
+
+        /*neuronalNetwork.train([
+            { input: [0,0,0], output: 'NO' },
+            { input: [0,0,1], output: 'NO' },
+            { input: [0,1,1], output: 'NO' },
+            { input: [1,0,1], output: 'YES' },
+            { input: [1,1,1], output: 'YES' }
+        ], {
+            iterations: 100
+        });
+
+        const output = net.run([1,0,0]);
+        console.log(`Output: ${output}`);
         */
 
-        
-        return new Promise((resolve/*, rejected*/) => {
-            resolve(json);
-        });
-        
     }
 }

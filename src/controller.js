@@ -22,6 +22,8 @@ module.exports = {
 
     async getServiceRequest (req, res) {
         
+        console.clear();
+
         const justshowmeServiceRequestUri = req.get('justshowme-service-request-uri');
         res.header('Content-Type', 'application/json');
         
@@ -34,11 +36,26 @@ module.exports = {
                 },
                 json: true
             }).then((json) => {
-                let analyzedJson = analyse.analyzeMatchingComponentTypes(json);
-                console.clear();
-                console.log(analyzedJson);
-                res.json(analyzedJson);
-                res.end();
+                
+                try {
+                    analyse.analyzeMatchingComponentTypes(json).then(analyzedJsonData => {
+                        console.log(analyzedJsonData);
+                        res.json(analyzedJsonData);
+                        res.end();
+                    });
+                    
+                    /*
+                    let analyzedJsonData = analyse.analyzeMatchingComponentTypes(json);
+                    console.log(`analyzedJsonData ${analyzedJsonData}`);
+                    res.json(analyzedJsonData);
+                    res.end();
+                    */
+                    
+                } catch (e) {
+                    console.error(e);
+                    res.end();
+                }
+
             })
             .catch((e) => {
                 console.error(e);
