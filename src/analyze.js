@@ -1,22 +1,38 @@
 const brain = require('brain.js');
+const trainingData = require('./training-data.js');
 
 const availableComponentTypes = ["text","video","textfield","link","image","article"];
 
-// const neuronalNetwork = new brain.recurrent.LSTM();
-const neuronalNetwork = new brain.NeuralNetwork();
+// const neuronalNetwork = new brain.NeuralNetwork();
+const neuronalNetwork = new brain.recurrent.LSTM();
 
-neuronalNetwork.train([
-    { input: {
-        'text': 'abc'
-    }, output: { text: 1 } },
-    { input: {
-        "path": 'https://'
-    }, output: { link: 1 } },
-    { input: {
-        "path": 'mp4'
-    }, output: { video: 1 } }
-], {
-    iterations: 100,
+/*
+NORMAL STRUCTURE
+const trainData = trainingData.map(data => {
+    let input = data.options;
+    let output = {};
+        output[data.type] = 1;
+    let trainData = { input: input, output: output };
+    return trainData;
+});
+console.log(trainData);
+*/ 
+
+/*
+LSTM STRUCTURE
+*/
+const trainData = trainingData.map(data => {
+    let input = Object.keys(data.options).map(function(key, index) {
+        return key + " " + data.options[key];
+    });
+    let output = data.type;
+    let trainData = { input: input, output: output };
+    return trainData;
+});
+console.log(trainData);
+
+neuronalNetwork.train(trainData, {
+    iterations: 1000,
 });
 
 const analyseByNeuronalNetwork = (unit) => {
@@ -26,19 +42,12 @@ const analyseByNeuronalNetwork = (unit) => {
     }
 
     if (!unit.type && !availableComponentTypes.includes(unit.type)) {        
+        console.log(unit.options);
+        let result = neuronalNetwork.run(unit.options.path);
+    
+        console.log(result);
+        unit.type = result;
         
-        console.log('');
-        console.log('');
-        console.log('');
-        console.log('');
-        console.log('>', unit.id, unit.type);
-        console.log(JSON.stringify(unit));
-        
-        const output = neuronalNetwork.run(unit.options);
-        // unit.type = "MUH";
-        
-        console.log(output);
-
     }
 
     if (unit.units && unit.units.length) {
