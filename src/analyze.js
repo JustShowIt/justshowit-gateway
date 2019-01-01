@@ -21,18 +21,16 @@ console.log(trainData);
 /*
 LSTM STRUCTURE
 */
-const trainData = trainingData.map(data => {
+const networkTrainData = [];
+trainingData.map(data => {
     let input = Object.keys(data.options).map(function(key, index) {
-        return key + " " + data.options[key];
+        networkTrainData.push({ input: key + " " + data.options[key], output: data.type });
     });
-    let output = data.type;
-    let trainData = { input: input, output: output };
-    return trainData;
 });
-console.log(trainData);
+console.log("TRAINING DATA >>>", networkTrainData);
 
-neuronalNetwork.train(trainData, {
-    iterations: 1000,
+neuronalNetwork.train(networkTrainData, {
+    iterations: 100,
 });
 
 const analyseByNeuronalNetwork = (unit) => {
@@ -42,11 +40,14 @@ const analyseByNeuronalNetwork = (unit) => {
     }
 
     if (!unit.type && !availableComponentTypes.includes(unit.type)) {        
-        console.log(unit.options);
-        let result = neuronalNetwork.run(unit.options.path);
-    
+
+        let result = Object.keys(unit.options).map(function(key) {
+            let input = key + " " + unit.options[key];
+            return neuronalNetwork.run(input);
+        });
+
         console.log(result);
-        unit.type = result;
+        //unit.type = result;
         
     }
 
