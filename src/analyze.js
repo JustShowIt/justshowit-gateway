@@ -9,6 +9,7 @@ const neuronalNetwork = new brain.recurrent.LSTM();
 const networkTrainData = [];
 
 /* >>> Idee ...
+
     https://www.youtube.com/watch?v=RVMHhtTqUxc >>> bei 16:45 min
     ENCODE TEXT INPUT >>> "Dies ist ein test".split('').map(x => (x.charCodeAt(0) / 255));
     ENCODED TEXT INPUT >>> [0.26666666666666666, 0.4117647058823529, 0.396078431372549, 0.45098039215686275, 0.12549019607843137, 0.4117647058823529, 0.45098039215686275, 0.4549019607843137, 0.12549019607843137, 0.396078431372549, 0.4117647058823529, 0.43137254901960786, 0.12549019607843137, 0.4549019607843137, 0.396078431372549, 0.45098039215686275, 0.4549019607843137]
@@ -23,6 +24,8 @@ const trainData = [
         output: { video: 1 }
     }
 ]
+
+!!! Aktuell kommt nur NaN als Result... hmm keine AHnung warum. !!!
 */
 
 trainingData.map(data => {
@@ -50,7 +53,7 @@ const analyseByNeuronalNetwork = (unit) => {
             return neuronalNetwork.run(input);
         });
 
-        console.log(result);
+        console.log("NEURONAL NETWORK RESULT >>>", result);
         //unit.type = result;
         
     }
@@ -66,6 +69,15 @@ const analyseByNeuronalNetwork = (unit) => {
 
 module.exports = {
     async analyzeMatchingComponentTypes (json) {
+
+        /*const net = new brain.recurrent.LSTM();
+        net2.train([
+            { input: "Dies ist ein test".split('').map(x => (x.charCodeAt(0) / 255)), output: { test: 1 } },
+            { input: "Dies ist ein video".split('').map(x => (x.charCodeAt(0) / 255)), output: { video: 1 } }
+        ]);
+        let result = net2.run('test'.split('').map(x => (x.charCodeAt(0) / 255)));
+        console.log("Result:", result);*/
+
         const analyzedJson = await analyseByNeuronalNetwork(json);
         return analyzedJson;
     }
