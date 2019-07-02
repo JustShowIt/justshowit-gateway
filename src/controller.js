@@ -28,11 +28,7 @@ module.exports = {
         res.header('Content-Type', 'application/json');
         
         if (justshowmeServiceRequestUri && justshowmeServiceRequestUri.length > 7) {
-<<<<<<< HEAD
             console.log('Header "justshowme-service-request-uri" found. GET - ' + req.get('justshowme-service-request-uri'));
-=======
-            console.log('Header -justshowme-service-request-uri- found. GET - ' + justshowmeServiceRequestUri);
->>>>>>> a825b617a84a3afe809ab53eeeaf3b8bc06e381b
             request({
                 uri: justshowmeServiceRequestUri,
                 headers: {
@@ -44,14 +40,10 @@ module.exports = {
 
                 try {
                     analyse.analyzeMatchingComponentTypes(json).then(analyzedJsonData => {
-<<<<<<< HEAD
                         console.log('');
                         console.log('----- Response ---------------------------------------');
                         console.log('');
                         console.log(analyzedJsonData);
-=======
-                        console.log('ANALYZED JSON DATA >>>', analyzedJsonData);
->>>>>>> a825b617a84a3afe809ab53eeeaf3b8bc06e381b
                         res.json(analyzedJsonData);
                         res.end();
                     });
