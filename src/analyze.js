@@ -4,10 +4,32 @@ const trainingData = require('./training-data.js');
 const availableComponentTypes = ["text","video","textfield","link","image","article"];
 const networkTrainData = [];
 
+<<<<<<< HEAD
 const encodeOptionsToTrainData = (options) => {
     let data = JSON.stringify(options).replace(/["':]/g, "").split('').map(x => (x.charCodeAt(0) / 255));
     return data;
 }
+=======
+/* >>> Idee ...
+
+    https://www.youtube.com/watch?v=RVMHhtTqUxc >>> bei 16:45 min
+    ENCODE TEXT INPUT >>> "Dies ist ein test".split('').map(x => (x.charCodeAt(0) / 255));
+    ENCODED TEXT INPUT >>> [0.26666666666666666, 0.4117647058823529, 0.396078431372549, 0.45098039215686275, 0.12549019607843137, 0.4117647058823529, 0.45098039215686275, 0.4549019607843137, 0.12549019607843137, 0.396078431372549, 0.4117647058823529, 0.43137254901960786, 0.12549019607843137, 0.4549019607843137, 0.396078431372549, 0.45098039215686275, 0.4549019607843137]
+
+const trainData = [
+    {
+        input: "Dies ist ein test",
+        output: { test: 1 }
+    },
+    {
+        input: "Dies ist ein video",
+        output: { video: 1 }
+    }
+]
+
+!!! Aktuell kommt nur NaN als Result... hmm keine AHnung warum. !!!
+*/
+>>>>>>> a825b617a84a3afe809ab53eeeaf3b8bc06e381b
 
 trainingData.map(data => {
     let input = encodeOptionsToTrainData(data.options);
@@ -30,9 +52,22 @@ const analyseByNeuronalNetwork = (unit) => {
         unit.createdDate = new Date();
     }
 
+<<<<<<< HEAD
     if (!unit.type && !availableComponentTypes.includes(unit.type)) {
         let result = trainedNet(encodeOptionsToTrainData(unit.options));
         console.log(result);
+=======
+    if (!unit.type && !availableComponentTypes.includes(unit.type)) {        
+
+        let result = Object.keys(unit.options).map(function(key) {
+            let input = key + " " + unit.options[key];
+            return neuronalNetwork.run(input);
+        });
+
+        console.log("NEURONAL NETWORK RESULT >>>", result);
+        //unit.type = result;
+        
+>>>>>>> a825b617a84a3afe809ab53eeeaf3b8bc06e381b
     }
 
     if (unit.units && unit.units.length) {
@@ -46,6 +81,15 @@ const analyseByNeuronalNetwork = (unit) => {
 
 module.exports = {
     async analyzeMatchingComponentTypes (json) {
+
+        /*const net = new brain.recurrent.LSTM();
+        net2.train([
+            { input: "Dies ist ein test".split('').map(x => (x.charCodeAt(0) / 255)), output: { test: 1 } },
+            { input: "Dies ist ein video".split('').map(x => (x.charCodeAt(0) / 255)), output: { video: 1 } }
+        ]);
+        let result = net2.run('test'.split('').map(x => (x.charCodeAt(0) / 255)));
+        console.log("Result:", result);*/
+
         const analyzedJson = await analyseByNeuronalNetwork(json);
         return analyzedJson;
     }
