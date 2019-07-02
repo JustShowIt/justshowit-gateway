@@ -28,7 +28,7 @@ module.exports = {
         res.header('Content-Type', 'application/json');
         
         if (justshowmeServiceRequestUri && justshowmeServiceRequestUri.length > 7) {
-            console.log('Header -justshowme-service-request-uri- found. GET - ' + req.get('justshowme-service-request-uri'));
+            console.log('Header "justshowme-service-request-uri" found. GET - ' + req.get('justshowme-service-request-uri'));
             request({
                 uri: justshowmeServiceRequestUri,
                 headers: {
@@ -39,6 +39,9 @@ module.exports = {
                 
                 try {
                     analyse.analyzeMatchingComponentTypes(json).then(analyzedJsonData => {
+                        console.log('');
+                        console.log('----- Response ---------------------------------------');
+                        console.log('');
                         console.log(analyzedJsonData);
                         res.json(analyzedJsonData);
                         res.end();
