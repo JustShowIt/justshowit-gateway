@@ -22,13 +22,10 @@ module.exports = {
 
     async getServiceRequest (req, res) {
         
-        console.clear();
-
         const justshowmeServiceRequestUri = req.get('justshowme-service-request-uri');
         res.header('Content-Type', 'application/json');
         
         if (justshowmeServiceRequestUri && justshowmeServiceRequestUri.length > 7) {
-            console.log('Header "justshowme-service-request-uri" found. GET - ' + req.get('justshowme-service-request-uri'));
             request({
                 uri: justshowmeServiceRequestUri,
                 headers: {
@@ -36,13 +33,9 @@ module.exports = {
                 },
                 json: true
             }).then((json) => {
-                console.log("RESPONSE >>>", json);
 
                 try {
                     analyse.analyzeMatchingComponentTypes(json).then(analyzedJsonData => {
-                        console.log('');
-                        console.log('----- Response ---------------------------------------');
-                        console.log('');
                         console.log(analyzedJsonData);
                         res.json(analyzedJsonData);
                         res.end();
@@ -66,7 +59,6 @@ module.exports = {
         const justshowmeServiceRequestUri = req.get('justshowme-service-request-uri');
         
         if (justshowmeServiceRequestUri && justshowmeServiceRequestUri.length > 7) {
-            console.log('Header -justshowme-service-request-uri- found. POST - ' + justshowmeServiceRequestUri);
             request({
                 uri: req.get('justshowme-service-request-uri'),
                 body: req.body,

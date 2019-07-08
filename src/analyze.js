@@ -4,34 +4,37 @@ const trainingData = require('./training-data.js');
 const availableComponentTypes = ["text","video","textfield","link","image","article"];
 const networkTrainData = [];
 
-const encodeOptionsToTrainData = (options) => {
-    let data = JSON.stringify(options).replace(/["':]/g, "").split('').map(x => (x.charCodeAt(0) / 255));
+const convertOptionsToTrainData = (options) => {
+    let data =  JSON.stringify(options)
+                    .replace(/["':]/g, "")
+                    .split('')
+                    .map(x => (x.charCodeAt(0) / 255));
     return data;
 }
 
 trainingData.map(data => {
-    let input = encodeOptionsToTrainData(data.options);
-    let output = {};
-        output[data.type] = 1;
-    let trainData = { input: input, output: output };
-    //console.log(trainData);
+    let input = convertOptionsToTrainData(data.options);
+    // let output = {};
+    //     output[data.type] = 1;
+    let trainData = { input: input, output: [data.type] };
+    // console.log(trainData);
     networkTrainData.push(trainData);
 });
 
-//console.log("TRAINING DATA >>>", networkTrainData);
+// console.log("TRAINING DATA >>>", networkTrainData);
 
 const net = new brain.NeuralNetwork();
 net.train(networkTrainData, { iterations: 100 });
 let trainedNet = net.toFunction();
 
 const analyseByNeuronalNetwork = (unit) => {
-    
-    if (!unit.createdDate) {        
+    if (!unit.createdDate) {
         unit.createdDate = new Date();
     }
 
-    if (!unit.type && !availableComponentTypes.includes(unit.type)) {
-        let result = trainedNet(encodeOptionsToTrainData(unit.options));
+    if (typeof unit.type === 'undefined' || !unit.type && !availableComponentTypes.includes(unit.type)) {
+        console.log(unit);
+        let result = trainedNet(convertOptionsToTrainData(unit.options));
         console.log(result);
     }
 
