@@ -8,7 +8,8 @@
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
-        "dev": "npm link justshowit-ui-base-application && npm start"
+        "dev": "npm link justshowit-ui-base-application && npm start",
+        "analyze-test": "node src/analyze-test.js"
     },
     "dependencies": {
         "brain.js": "^1.6.1",
