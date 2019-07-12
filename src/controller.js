@@ -1,5 +1,5 @@
 // const model = require('./model');
-const analyse = require('./analyze');
+const analyse = require('./analyze/analyze.js');
 const ServiceConfig = require('./service-config.js');
 const request = require('request-promise');
 const fs = require('fs');
@@ -35,7 +35,7 @@ module.exports = {
             }).then((json) => {
 
                 try {
-                    analyse.analyzeMatchingComponentTypes(json).then(analyzedJsonData => {
+                    analyse.analyzeComponents(json).then(analyzedJsonData => {
                         console.log(analyzedJsonData);
                         res.json(analyzedJsonData);
                         res.end();

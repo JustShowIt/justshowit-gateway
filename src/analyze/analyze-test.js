@@ -1,5 +1,5 @@
 const brain = require('brain.js');
-const trainData = require('./training-data.js');
+const trainData = require('./components-training-data.js');
 
 const availableComponentTypes = ["text","video","textfield","link","image","article"];
 
