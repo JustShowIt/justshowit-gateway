@@ -1,3 +1,4 @@
+const uuidv1 = require('uuid/v1');
 const brain = require('brain.js');
 const trainingData = require('./components-training-data.js');
 
@@ -23,19 +24,23 @@ net.train(trainingData, trainConfig);
 
 console.info("Neural Network trained.");
 
-const convertOptionsToRunData = (options) => {
-    let optionsList = {};
+const convertParamsToRunData = (params) => {
+    let paramsList = {};
 
-    if (typeof options === 'object') {
-        Object.keys(options).forEach(key => {
-            optionsList[key] = 1;
+    if (typeof params === 'object') {
+        Object.keys(params).forEach(key => {
+            paramsList[key] = 1;
         });
     }
 
-    return optionsList;
+    return paramsList;
 }
 
 const analyseByNeuronalNetwork = (unit) => {
+    if (!unit.id) {
+        unit.id = uuidv1();
+    }
+
     if (!unit.createdDate) {
         unit.createdDate = new Date();
     }
@@ -45,7 +50,7 @@ const analyseByNeuronalNetwork = (unit) => {
     }
     
     if (unit.type === 'undefined' || !unit.type) {
-        let output = net.run(convertOptionsToRunData(unit.options));
+        let output = net.run(convertParamsToRunData(unit.params));
         
         let matchedComponent = null;
         let matchedComponentValue = 0;
@@ -60,7 +65,7 @@ const analyseByNeuronalNetwork = (unit) => {
         unit.type = matchedComponent;
     }
 
-    if (unit.units && unit.units.length) {
+    if (unit.units && Array.isArray(unit.units) && unit.units.length) {
         unit.units.map(unit => {
             unit = analyseByNeuronalNetwork(unit);
         });
