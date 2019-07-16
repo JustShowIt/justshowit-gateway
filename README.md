@@ -11,10 +11,8 @@ services:
     image: jsi/dataservice
     ports:
       - 9001:9001
-
-  muh:
-    build: justshowit-data-service-example
-    image: jsi/dataservice
+    volumes:
+      - ./justshowit-data-service-example/src:/app/src
 
   gateway:
     build: justshowit-gateway

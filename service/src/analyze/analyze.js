@@ -21,6 +21,7 @@ const analyseByNeuronalNetwork = (unit) => {
 
     for(let index in unit) {
         console.log(unit[index]);
+
     }
 
     // if (unit.units && Array.isArray(unit.units) && unit.units.length) {

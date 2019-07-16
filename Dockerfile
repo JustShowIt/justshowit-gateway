@@ -29,5 +29,3 @@ RUN npm install
 EXPOSE 9000
 
 CMD [ "nodemon", "/app/src/service.js"]
-
-#CMD [ "npm", "start" ]
