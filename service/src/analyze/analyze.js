@@ -12,10 +12,29 @@ const availableParams = ["text", "title", "description", "url", "resolution", "r
 const net = new brain.NeuralNetwork({ hiddenLayers: [3] });
 net.train(trainingData, { iterations: 20000 });
 
-const valueAnalyzeNet = new brain.NeuralNetwork({ hiddenLayers: [3] });
-valueAnalyzeNet.train(propertiesTrainingData, { iterations: 20000 });
+const valueAnalyzeNet = new brain.recurrent.LSTM();
+valueAnalyzeNet.train(propertiesTrainingData, {
+    iterations: 1500,
+    log: true,
+    logPeriod: 1,
+    layers: [3]
+});
+
 
 console.info("Neural Network trained.");
+
+
+
+
+let output = valueAnalyzeNet.run("mp4");
+console.log(output);
+
+
+
+
+
+
+
 
 const analyseByNeuronalNetwork = (unit) => {
     for(let key in unit) {
