@@ -1,23 +1,30 @@
-FROM node:11.3.0
+FROM alpine:3.9 as frontend
 
-ARG DOCKER_EXPOSE_PORT
-ENV DOCKER_EXPOSE_PORT $DOCKER_EXPOSE_PORT
+WORKDIR /app
 
-# Create app directory
-WORKDIR /usr/src/app
+RUN apk add --update nodejs nodejs-npm && \
+    npm install -g @vue/cli
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+COPY frontend .
+
+RUN npm install && \
+    npm run build
+
+RUN ls -lash dist
+
+
+
+FROM alpine:3.9
+
+WORKDIR /app
+
+RUN apk add --update nodejs nodejs-npm
+
+COPY service .
+COPY --from=frontend /app/dist /app/frontend
 
 RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
 
-# Bundle app source
-COPY . .
-
-EXPOSE $DOCKER_EXPOSE_PORT
+EXPOSE 9000
 
 CMD [ "npm", "start" ]
