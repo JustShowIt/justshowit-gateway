@@ -18,19 +18,59 @@ valueAnalyzeNet.train(propertiesTrainingData, { iterations: 20000 });
 console.info("Neural Network trained.");
 
 const analyseByNeuronalNetwork = (unit) => {
+    for(let key in unit) {
+        let value = unit[key];
 
-    for(let index in unit) {
-        console.log(unit[index]);
+        unit[key] = checkValueType(key, value);
+    }
+    return unit;
+}
 
+const checkValueType = (key, value) => {
+
+    if (typeof value === 'string') {
+        analyzeValue(key, value);
+    }
+    else if (typeof value === 'object') {
+        return analyseByNeuronalNetwork(value);
+    }
+    else if ((Array.isArray(value) && value.length)) {
+        return value.map(unit => {
+            unit = analyseByNeuronalNetwork(unit);
+        });
     }
 
-    // if (unit.units && Array.isArray(unit.units) && unit.units.length) {
-    //     unit.units.map(unit => {
-    //         unit = analyseByNeuronalNetwork(unit);
-    //     });
-    // }
-
 }
+
+const analyzeValue = (key, value) => {
+    console.log('analyze: ', key, value);
+}
+
+
+
+// const analyseByNeuronalNetwork = (unit) => {
+//     for(let index in unit) {
+//
+//         if (typeof unit[index] === 'string') {
+//
+//             console.log(index, unit[index]);
+//
+//         } else if ( (Array.isArray(unit[index]) && unit[index].length) ) {
+//
+//             unit[index].map(unit => {
+//                 unit = analyseByNeuronalNetwork(unit);
+//             });
+//
+//         } else if (typeof unit[index] === 'object') {
+//
+//             unit[index].map(unit => {
+//                 unit = analyseByNeuronalNetwork(unit);
+//             });
+//
+//         }
+//     }
+//     return unit;
+// }
 
 // const analyseByNeuronalNetwork = (unit) => {
 //
