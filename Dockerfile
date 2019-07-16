@@ -18,7 +18,8 @@ FROM alpine:3.9
 
 WORKDIR /app
 
-RUN apk add --update nodejs nodejs-npm
+RUN apk add --update nodejs nodejs-npm && \
+    npm install -g nodemon
 
 COPY service .
 COPY --from=frontend /app/dist /app/frontend
@@ -27,4 +28,6 @@ RUN npm install
 
 EXPOSE 9000
 
-CMD [ "npm", "start" ]
+CMD [ "nodemon", "/app/src/service.js"]
+
+#CMD [ "npm", "start" ]

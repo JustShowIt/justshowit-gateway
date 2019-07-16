@@ -11,6 +11,7 @@
         "analyze-test": "node src/analyze-test.js"
     },
     "dependencies": {
+        "node-watch": "^0.6.2",
         "brain.js": "^1.6.1",
         "express": "^4.17.1",
         "log4js": "^4.4.0",

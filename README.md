@@ -21,6 +21,10 @@ services:
     image: jsi/gateway
     ports:
       - 9000:9000
+    volumes:
+      - ./justshowit-gateway/service/src:/app/src
+      # - ./justshowit-gateway/frontend/dist:/app/frontend
     depends_on:
       - dataservice
+
 ```
