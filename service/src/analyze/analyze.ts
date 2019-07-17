@@ -1,33 +1,24 @@
-const uuidv1 = require('uuid/v1');
-const brain = require('brain.js');
-const analyzeUtils = require('./analyze-utils.js');
-// const jsi = require('../justShowIt/utils.js');
+import uuidv1 from 'uuid/v1';
+import brain from 'brain.js';
+import analyzeUtils from './analyze-utils';
 
-const trainingData = require('./components-training-data.js');
-const propertiesTrainingData = require('./properties-training-data.js');
+import trainingData from './components-training-data';
+import propertiesTrainingData from './properties-training-data';
 
 const availableComponentTypes = ["list", "text", "video", "link", "image", "article" ];
 const availableParams = ["text", "title", "description", "url", "resolution", "runtime", "size", "author"];
+
 
 const net = new brain.NeuralNetwork({ hiddenLayers: [3] });
 net.train(trainingData, { iterations: 20000 });
 
 const valueAnalyzeNet = new brain.recurrent.LSTM();
-valueAnalyzeNet.train(propertiesTrainingData, {
-    iterations: 1500,
-    log: true,
-    logPeriod: 1,
-    layers: [3]
-});
-
-
-console.info("Neural Network trained.");
-
-
-
+valueAnalyzeNet.train(propertiesTrainingData, { iterations: 1500 });
 
 let output = valueAnalyzeNet.run("mp4");
 console.log(output);
+
+console.info("Neuronal Networks has been trained.");
 
 
 
@@ -153,7 +144,7 @@ const analyzeValue = (key, value) => {
 //     return unit;
 // }
 
-module.exports = {
+export default {
     async analyzeComponents (json) {
         const analyzedData = await analyseByNeuronalNetwork(json);
         return analyzedData;

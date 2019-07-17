@@ -1,21 +1,22 @@
-// const model = require('./model');
-const analyse = require('./analyze/analyze.js');
-const ServiceConfig = require('./service-config.js');
-const request = require('request-promise');
-const fs = require('fs');
-const path = require('path');
+import analyse from "./analyze/analyze";
+import ServiceConfig from "./service-config";
+import request from "request-promise";
+import * as fs from 'fs';
+import * as path from 'path';
 
-module.exports = {
+export default {
     
     async getUiBaseApplication (req, res) {
 
         let justshowitUiBaseApplicationPath = path.join(__dirname, '..', ServiceConfig.justshowitUiBaseApplicationPath);
-        fs.readFileSync(justshowitUiBaseApplicationPath + 'index.html').then(content => {
+
+        fs.readFile(justshowitUiBaseApplicationPath + 'index.html', 'utf8', (error, data) => {
             res.set('Content-Type', 'text/html');
-            res.send(new Buffer.alloc(content.length, content));
+
+            var buffer = Buffer.from(data);
+            res.send(buffer);
+
             res.end();
-        }).catch(e => {
-            console.error(e);
         });
 
     },

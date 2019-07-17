@@ -1,29 +1,29 @@
 {
-    "private": true,
-    "organization": "justshowit",
-    "name": "justshowit-gateway",
-    "version": "0.0.1",
-    "description": "Just Show It - Intelligent User Interface",
-    "author": "Mario Linz <gelight@gmx.de>",
-    "main": "src/service.js",
-    "scripts": {
-        "start": "node src/service.js",
-        "analyze-test": "node src/analyze-test.js"
-    },
-    "dependencies": {
-        "node-watch": "^0.6.2",
-        "brain.js": "^1.6.1",
-        "express": "^4.17.1",
-        "log4js": "^4.4.0",
-        "orm": "^5.0.2",
-        "request": "^2.88.0",
-        "request-promise": "^4.2.4",
-        "uuid": "^3.3.2"
-    },
-    "server": {
-        "port": 9000
-    },
-    "docker": {
-        "expose": 3000
-    }
+  "private": true,
+  "organization": "justshowit",
+  "name": "justshowit-gateway",
+  "version": "0.0.1",
+  "description": "Just Show It - Intelligent User Interface",
+  "author": "Mario Linz <gelight@gmx.de>",
+  "main": "build/src/service.js",
+  "scripts": {
+    "start": "node build/src/service.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "node-watch": "^0.6.2",
+    "brain.js": "^1.6.1",
+    "express": "^4.17.1",
+    "log4js": "^4.4.0",
+    "orm": "^5.0.2",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "uuid": "^3.3.2"
+  },
+  "server": {
+    "port": 9000
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.6"
+  }
 }

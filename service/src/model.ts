@@ -1,5 +1,3 @@
-const request = require('request');
-
 const mock = [
     {
         "id": "ds76s-ds78sd7-gf8f7",
@@ -41,7 +39,7 @@ const mock = [
 ];
 
 
-module.exports = {
+export default {
     getTest (req) {
         return new Promise((resolve/*, rejected*/) => {
             resolve(mock[0]);

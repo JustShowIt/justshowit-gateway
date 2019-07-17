@@ -1,6 +1,6 @@
-const controller = require('./controller');
+import controller from "./controller";
 
-module.exports = (app) => {
+export default (app) => {
     app.get('/', controller.getUiBaseApplication);
     app.get('/justshowme', controller.getServiceRequest);
     app.post('/justshowme', controller.postServiceRequest);

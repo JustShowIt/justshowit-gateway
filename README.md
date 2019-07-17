@@ -1,5 +1,8 @@
 ## justshowit-gateway
 
+```
+docker-compose exec gateway sh
+```
 
 ```yaml
 version: "3.6"
@@ -24,5 +27,4 @@ services:
       # - ./justshowit-gateway/frontend/dist:/app/frontend
     depends_on:
       - dataservice
-
 ```

@@ -1,11 +1,9 @@
-const ServiceConfig = require('./service-config.js');
-const express = require('express');
-// const orm = require('orm');
-const router = require('./router');
-require('./analyze/analyze.js');
+import ServiceConfig from "./service-config";
+import express from "express";
+import router from "./router";
+import analyze from "./analyze/analyze";
 
 const app = express();
-// app.use(orm.express(dbPath, dbConfig));
 app.use(express.static(ServiceConfig.justshowitUiBaseApplicationPath));
 
 router(app);
@@ -13,4 +11,3 @@ router(app);
 app.listen(ServiceConfig.port, function () {
   console.log('Microservice "' + ServiceConfig.name + '" is listening to http://localhost:' + ServiceConfig.port);
 });
-
