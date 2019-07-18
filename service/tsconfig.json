@@ -15,7 +15,10 @@
       ]
     },
     "module": "commonjs",
+    "forceConsitentCasingInFileNames": true,
+    "noImplicitReturns": true,
     "strict": true,
+    "noUnusedLocals": true,
     "resolveJsonModule": true
   },
   "include": [

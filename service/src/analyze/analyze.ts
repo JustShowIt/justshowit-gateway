@@ -1,22 +1,20 @@
-import uuidv1 from 'uuid/v1';
-import brain from 'brain.js';
-import analyzeUtils from './analyze-utils';
+import JustShowItUnit from './../main/ts/gelight/justshowit/domain/JustShowItUnit';
 
-import trainingData from './components-training-data';
-import propertiesTrainingData from './properties-training-data';
+// import uuidv1 from 'uuid/v1';
+// import brain from 'brain.js';
+// import analyzeUtils from './analyze-utils';
 
-const availableComponentTypes = ["list", "text", "video", "link", "image", "article" ];
-const availableParams = ["text", "title", "description", "url", "resolution", "runtime", "size", "author"];
+// import trainingData from './components-training-data';
+// import propertiesTrainingData from './properties-training-data';
 
+// const indexAnalyzeNet = new brain.NeuralNetwork({ hiddenLayers: [3] });
+// indexAnalyzeNet.train(trainingData, { iterations: 20000 });
 
-const net = new brain.NeuralNetwork({ hiddenLayers: [3] });
-net.train(trainingData, { iterations: 20000 });
+// const valueAnalyzeNet = new brain.recurrent.LSTM();
+// valueAnalyzeNet.train(propertiesTrainingData, { iterations: 100 });
 
-const valueAnalyzeNet = new brain.recurrent.LSTM();
-valueAnalyzeNet.train(propertiesTrainingData, { iterations: 1500 });
-
-let output = valueAnalyzeNet.run("mp4");
-console.log(output);
+// let output = valueAnalyzeNet.run("mp4");
+// console.log(output);
 
 console.info("Neuronal Networks has been trained.");
 
@@ -27,34 +25,36 @@ console.info("Neuronal Networks has been trained.");
 
 
 
-const analyseByNeuronalNetwork = (unit) => {
-    for(let key in unit) {
-        let value = unit[key];
+// const analyseByNeuronalNetwork = (unit) => {
 
-        unit[key] = checkValueType(key, value);
-    }
-    return unit;
-}
+//     for(let key in unit) {
+//         let value = unit[key];
 
-const checkValueType = (key, value) => {
+//         unit[key] = checkValueType(key, value);
+//     }
 
-    if (typeof value === 'string') {
-        analyzeValue(key, value);
-    }
-    else if (typeof value === 'object') {
-        return analyseByNeuronalNetwork(value);
-    }
-    else if ((Array.isArray(value) && value.length)) {
-        return value.map(unit => {
-            unit = analyseByNeuronalNetwork(unit);
-        });
-    }
+//     return unit;
+// }
 
-}
+// const checkValueType = (key, value) => {
 
-const analyzeValue = (key, value) => {
-    console.log('analyze: ', key, value);
-}
+//     if (typeof value === 'string') {
+//         analyzeValue(key, value);
+//     }
+//     else if (typeof value === 'object') {
+//         return analyseByNeuronalNetwork(value);
+//     }
+//     else if ((Array.isArray(value) && value.length)) {
+//         return value.map(unit => {
+//             unit = analyseByNeuronalNetwork(unit);
+//         });
+//     }
+
+// }
+
+// const analyzeValue = (key, value) => {
+//     console.log('analyze: ', key, value);
+// }
 
 
 
@@ -118,7 +118,7 @@ const analyzeValue = (key, value) => {
 //
 //         // Analyze and set the best type for this unit
 //         if (unit.type === 'undefined' || !unit.type) {
-//             let output = net.run(analyzeUtils.convertParamsToRunData(unit.params));
+//             let output = indexAnalyzeNet.run(analyzeUtils.convertParamsToRunData(unit.params));
 //
 //             let matchedComponent = null;
 //             let matchedComponentValue = 0;
@@ -146,7 +146,7 @@ const analyzeValue = (key, value) => {
 
 export default {
     async analyzeComponents (json) {
-        const analyzedData = await analyseByNeuronalNetwork(json);
-        return analyzedData;
+        let justShowItUnit: JustShowItUnit = new JustShowItUnit(json);
+        return await justShowItUnit.getUnitAsJson();
     }
 }
