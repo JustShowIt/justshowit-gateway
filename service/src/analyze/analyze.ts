@@ -16,7 +16,7 @@ import JustShowItUnit from './../main/ts/gelight/justshowit/domain/JustShowItUni
 // let output = valueAnalyzeNet.run("mp4");
 // console.log(output);
 
-console.info("Neuronal Networks has been trained.");
+// console.info("Neuronal Networks has been trained.");
 
 
 
