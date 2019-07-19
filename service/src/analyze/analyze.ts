@@ -145,8 +145,17 @@ import JustShowItUnit from './../main/ts/gelight/justshowit/domain/JustShowItUni
 // }
 
 export default {
+    init () {
+
+    },
     async analyzeComponents (json) {
         let justShowItUnit: JustShowItUnit = new JustShowItUnit(json);
-        return await justShowItUnit.getUnitAsJson();
+        let unitJson = await justShowItUnit.getUnitAsJson();
+        
+        console.log("========== GENERATED UNIT JSON ==============================");
+        console.log(unitJson);
+        console.log("");
+        
+        return unitJson;
     }
 }

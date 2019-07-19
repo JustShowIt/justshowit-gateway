@@ -37,7 +37,6 @@ export default {
 
                 try {
                     analyse.analyzeComponents(json).then(analyzedJsonData => {
-                        console.log(analyzedJsonData);
                         res.json(analyzedJsonData);
                         res.end();
                     });
