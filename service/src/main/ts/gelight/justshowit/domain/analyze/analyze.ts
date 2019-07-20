@@ -1,28 +1,11 @@
-import JustShowItUnit from './../main/ts/gelight/justshowit/domain/JustShowItUnit';
+import JustShowItUnit from './../JustShowItUnit';
 
-// import uuidv1 from 'uuid/v1';
-// import brain from 'brain.js';
-// import analyzeUtils from './analyze-utils';
+import brain from 'brain.js';
+import trainingData from './components-training-data';
+import propertiesTrainingData from './properties-training-data';
 
-// import trainingData from './components-training-data';
-// import propertiesTrainingData from './properties-training-data';
-
-// const indexAnalyzeNet = new brain.NeuralNetwork({ hiddenLayers: [3] });
-// indexAnalyzeNet.train(trainingData, { iterations: 20000 });
-
-// const valueAnalyzeNet = new brain.recurrent.LSTM();
-// valueAnalyzeNet.train(propertiesTrainingData, { iterations: 100 });
-
-// let output = valueAnalyzeNet.run("mp4");
-// console.log(output);
-
-// console.info("Neuronal Networks has been trained.");
-
-
-
-
-
-
+const indexAnalyzeNet = new brain.NeuralNetwork({ hiddenLayers: [3] });
+const valueAnalyzeNet = new brain.recurrent.LSTM();
 
 
 // const analyseByNeuronalNetwork = (unit) => {
@@ -146,11 +129,14 @@ import JustShowItUnit from './../main/ts/gelight/justshowit/domain/JustShowItUni
 
 export default {
     init () {
+        indexAnalyzeNet.train(trainingData, { iterations: 20000 });
+        valueAnalyzeNet.train(propertiesTrainingData, { iterations: 100 });
 
+        console.info("Neuronal Networks has been trained.");
     },
     async analyzeComponents (json) {
         let justShowItUnit: JustShowItUnit = new JustShowItUnit(json);
-        let unitJson = await justShowItUnit.getUnitAsJson();
+        let unitJson = await justShowItUnit.getUnitAsJSON();
         
         console.log("========== GENERATED UNIT JSON ==============================");
         console.log(unitJson);

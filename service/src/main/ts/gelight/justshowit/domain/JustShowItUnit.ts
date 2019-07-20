@@ -5,12 +5,14 @@ interface JustShowItUnitInterface {
   getType(): string;
   setCreationDate(): void;
   getCreationDate(): Date;
-  getUnitAsJson(): JSON;
   setParam(index: string, value: string): void;
   getParam(index: string): string;
+  addUnit(unit: JustShowItUnit): void;
+  getUnitAsJSON(): JSON;
 }
 
 import uuidv1 from 'uuid/v1';
+// import analyze from './analyze/analyze';
 
 export default class JustShowItUnit implements JustShowItUnitInterface {
 
@@ -19,35 +21,38 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   // private availableComponentTypes: Array<string> = ["list", "text", "video", "link", "image", "article" ];
   // private availableParams: Array<string> = ["text", "title", "description", "url", "resolution", "runtime", "size", "author"];
 
-  private uuid: string = uuidv1();
-  private type: string = 'unit';
+  private uuid: string = '';
+  private type: string = '';
   private creationDate: Date = new Date();
   private params: Object = {};
   private units: JustShowItUnit[] = [];
   
   constructor(json: JSON) {
     this.json = json;
-
+    
     this.setUuid(uuidv1());
     this.setCreationDate();
 
-    if (Array.isArray(this.json) && this.json.length) {
-      for (let index in this.json) {
-        let unit = new JustShowItUnit(this.json[index]);
-        this.units.push(unit);
-      }
-    }
-    
-    if (typeof this.json === 'object' && Object.keys(this.json).length) {
-      console.log("");
-      console.log("OBJECT");
-      console.log(this.json);
-      this.units.push(new JustShowItUnit(this.json));    
-    }
-
     if (typeof this.json === 'string') {
+      
+      // 1. Analyze string and choose the best parameter type
+      // 2. Analyze which is the best component based on params 
+
       this.setType("text");
       this.setParam("text", this.json);
+
+    } else if (Array.isArray(this.json) && this.json.length) {
+      
+      this.setType('list');
+      for (let index in this.json) {
+        this.addUnit(new JustShowItUnit(this.json[index]));
+      }
+
+    } else if (typeof this.json === 'object' && Object.keys(this.json).length) {
+
+      // 1. Analyze all params and replace or set all related params
+      // 2. Analyze which is the best component based on params 
+
     }
     
   }
@@ -56,7 +61,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     if (uuid) {
       this.uuid = uuid;
     }
-    if (this.json.hasOwnProperty('uuid')) {
+    if (this.uuid !== '' && this.json.hasOwnProperty('uuid')) {
       this.uuid = this.json['uuid'];
     }
   }
@@ -69,7 +74,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     if (type) {
       this.type = type;
     }
-    if (this.json.hasOwnProperty('type')) {
+    if (this.type !== '' && this.json.hasOwnProperty('type')) {
       this.type = this.json['type'];
     }
   }
@@ -88,24 +93,28 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return this.creationDate;
   }
 
-  getUnitAsJson(): JSON {
-    let unit: any = {
-      id: this.getUuid(),
-      type: this.getType(),
-      creationDate: this.getCreationDate(),
-      params: this.params,
-      units: this.units.map(unit => unit.getCreationDate())
-    };
-
-    return unit;
-  }
-
   setParam(index: string, value: string): void {
     this.params[index] = value;
   }
   
   getParam(index: string): string {
     return this.params[index];
+  }
+
+  addUnit(unit: JustShowItUnit): void {
+    this.units.push(unit);
+  }
+  
+  getUnitAsJSON(): JSON {
+    let unit: any = {
+      id: this.getUuid(),
+      type: this.getType(),
+      creationDate: this.getCreationDate(),
+      params: this.params,
+      units: this.units.map(unit => unit.getUnitAsJSON())
+    };
+
+    return unit;
   }
 
 }

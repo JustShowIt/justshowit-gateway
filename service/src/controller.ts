@@ -1,4 +1,4 @@
-import analyse from "./analyze/analyze";
+import analyse from "./main/ts/gelight/justshowit/domain/analyze/analyze";
 import ServiceConfig from "./service-config";
 import request from "request-promise";
 import * as fs from 'fs';

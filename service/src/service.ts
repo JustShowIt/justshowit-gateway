@@ -2,7 +2,7 @@ import ServiceConfig from "./service-config";
 import express from "express";
 import router from "./router";
 
-import analyze from "./analyze/analyze";
+import analyze from "./main/ts/gelight/justshowit/domain/analyze/analyze";
 analyze.init();
 
 const app = express();
