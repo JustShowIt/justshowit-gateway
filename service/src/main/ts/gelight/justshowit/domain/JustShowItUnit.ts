@@ -7,19 +7,23 @@ interface JustShowItUnitInterface {
   getCreationDate(): Date;
   setParam(index: string, value: string): void;
   getParam(index: string): string;
+  getParams(): Object;
   addUnit(unit: JustShowItUnit): void;
   getUnitAsJSON(): JSON;
+  analyzeStringValue(value: string): void;
+  analyzeArrayValue(json: JSON): void;
+  analyzeObjectValue(json: JSON): void;
 }
 
 import uuidv1 from 'uuid/v1';
-// import analyze from './analyze/analyze';
+import analyze from './analyze/analyze';
 
 export default class JustShowItUnit implements JustShowItUnitInterface {
 
   private json: JSON;
 
   // private availableComponentTypes: Array<string> = ["list", "text", "video", "link", "image", "article" ];
-  // private availableParams: Array<string> = ["text", "title", "description", "url", "resolution", "runtime", "size", "author"];
+  private availableParams: Array<string> = ["text", "title", "description", "url", "resolution", "runtime", "size", "author"];
 
   private uuid: string = '';
   private type: string = '';
@@ -35,23 +39,15 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
 
     if (typeof this.json === 'string') {
       
-      // 1. Analyze string and choose the best parameter type
-      // 2. Analyze which is the best component based on params 
-
-      this.setType("text");
-      this.setParam("text", this.json);
+      this.analyzeStringValue(this.json);
 
     } else if (Array.isArray(this.json) && this.json.length) {
       
-      this.setType('list');
-      for (let index in this.json) {
-        this.addUnit(new JustShowItUnit(this.json[index]));
-      }
+      this.analyzeArrayValue(this.json);
 
     } else if (typeof this.json === 'object' && Object.keys(this.json).length) {
 
-      // 1. Analyze all params and replace or set all related params
-      // 2. Analyze which is the best component based on params 
+      this.analyzeObjectValue(this.json);
 
     }
     
@@ -101,6 +97,10 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return this.params[index];
   }
 
+  getParams(): Object {
+    return this.params;
+  }
+
   addUnit(unit: JustShowItUnit): void {
     this.units.push(unit);
   }
@@ -115,6 +115,30 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     };
 
     return unit;
+  }
+
+  analyzeStringValue(value: string): void {
+    // Analyzed value to choose the best input type
+    let bestInputType = analyze.getBestInputTypeByValue(value);
+    if (this.availableParams.indexOf(bestInputType) > -1) {
+      this.setParam(bestInputType, value);
+    }
+    // Analyzed which is the best component based on defined params 
+    let bestComponentType = analyze.getBestComponentTypeByParams(this.getParams());
+    this.setType(bestComponentType);
+  }
+
+  analyzeArrayValue(json: JSON): void {
+    this.setType('list');
+    for (let index in json) {
+      this.addUnit(new JustShowItUnit(json[index]));
+    }
+  }
+
+  analyzeObjectValue(json: JSON): void {
+    
+    // Not implemented yet ...
+    
   }
 
 }

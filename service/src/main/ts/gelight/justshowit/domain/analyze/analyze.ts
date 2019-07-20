@@ -1,69 +1,12 @@
 import JustShowItUnit from './../JustShowItUnit';
+import analyzeUtils from './analyze-utils';
 
 import brain from 'brain.js';
 import trainingData from './components-training-data';
 import propertiesTrainingData from './properties-training-data';
 
-const indexAnalyzeNet = new brain.NeuralNetwork({ hiddenLayers: [3] });
-const valueAnalyzeNet = new brain.recurrent.LSTM();
-
-
-// const analyseByNeuronalNetwork = (unit) => {
-
-//     for(let key in unit) {
-//         let value = unit[key];
-
-//         unit[key] = checkValueType(key, value);
-//     }
-
-//     return unit;
-// }
-
-// const checkValueType = (key, value) => {
-
-//     if (typeof value === 'string') {
-//         analyzeValue(key, value);
-//     }
-//     else if (typeof value === 'object') {
-//         return analyseByNeuronalNetwork(value);
-//     }
-//     else if ((Array.isArray(value) && value.length)) {
-//         return value.map(unit => {
-//             unit = analyseByNeuronalNetwork(unit);
-//         });
-//     }
-
-// }
-
-// const analyzeValue = (key, value) => {
-//     console.log('analyze: ', key, value);
-// }
-
-
-
-// const analyseByNeuronalNetwork = (unit) => {
-//     for(let index in unit) {
-//
-//         if (typeof unit[index] === 'string') {
-//
-//             console.log(index, unit[index]);
-//
-//         } else if ( (Array.isArray(unit[index]) && unit[index].length) ) {
-//
-//             unit[index].map(unit => {
-//                 unit = analyseByNeuronalNetwork(unit);
-//             });
-//
-//         } else if (typeof unit[index] === 'object') {
-//
-//             unit[index].map(unit => {
-//                 unit = analyseByNeuronalNetwork(unit);
-//             });
-//
-//         }
-//     }
-//     return unit;
-// }
+const AnalyzeInputNet = new brain.NeuralNetwork({ hiddenLayers: [3] });
+const AnalyzeValueNet = new brain.recurrent.LSTM();
 
 // const analyseByNeuronalNetwork = (unit) => {
 //
@@ -101,7 +44,7 @@ const valueAnalyzeNet = new brain.recurrent.LSTM();
 //
 //         // Analyze and set the best type for this unit
 //         if (unit.type === 'undefined' || !unit.type) {
-//             let output = indexAnalyzeNet.run(analyzeUtils.convertParamsToRunData(unit.params));
+//             let output = AnalyzeInputNet.run(analyzeUtils.convertParamsToRunData(unit.params));
 //
 //             let matchedComponent = null;
 //             let matchedComponentValue = 0;
@@ -129,10 +72,31 @@ const valueAnalyzeNet = new brain.recurrent.LSTM();
 
 export default {
     init () {
-        indexAnalyzeNet.train(trainingData, { iterations: 20000 });
-        valueAnalyzeNet.train(propertiesTrainingData, { iterations: 100 });
+        AnalyzeInputNet.train(trainingData, { iterations: 20000 });
+        AnalyzeValueNet.train(propertiesTrainingData, { iterations: 100 });
 
         console.info("Neuronal Networks has been trained.");
+    },
+    getBestComponentTypeByParams (params: Object): string {
+        let output: Array<Float32Array> = AnalyzeInputNet.run(
+            analyzeUtils.convertParamsToRunData(params)
+        );
+
+        let matchedComponent: string = '';
+        let matchedComponentValue = 0;
+        
+        Object.keys(output).forEach(key => {
+            if (output[key] > matchedComponentValue) {
+                matchedComponentValue = output[key];
+                matchedComponent = key;
+            }
+        });
+
+        return matchedComponent;
+    },
+    getBestInputTypeByValue (value: string): string {
+        let bestInputType = AnalyzeValueNet.run(value);
+        return bestInputType;
     },
     async analyzeComponents (json) {
         let justShowItUnit: JustShowItUnit = new JustShowItUnit(json);
