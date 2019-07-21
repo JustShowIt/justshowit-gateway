@@ -1,21 +1,3 @@
-interface JustShowItUnitInterface {
-  setUuid(uuid?: string): void;
-  getUuid(): string;
-  setType(type?: string): void;
-  getType(): string;
-  setCreationDate(): void;
-  getCreationDate(): Date;
-  setParam(index: string, value: string): void;
-  setParams(params: Object): void;
-  getParam(index: string): string;
-  getParams(): Object;
-  addUnit(unit: JustShowItUnit): void;
-  getUnitAsJSON(): JSON;
-  analyzeStringValue(value: string): void;
-  analyzeArrayValue(json: JSON): void;
-  analyzeObjectValue(json: JSON): void;
-}
-
 import uuidv1 from 'uuid/v1';
 import analyze from './analyze/analyze';
 
