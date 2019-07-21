@@ -13,8 +13,14 @@ export default {
         getParams () {
             return this.unit.params ? this.unit.params : {}
         },
+        getParam (param) {
+            return this.unit.params[param];
+        },
         hasParams () {
             return this.getParams().length ? true : false
+        },
+        hasParam (param) {
+            return this.getParam(param) ? true : false
         },
         hasUnits () {
           return (this.unit.hasUnits)
