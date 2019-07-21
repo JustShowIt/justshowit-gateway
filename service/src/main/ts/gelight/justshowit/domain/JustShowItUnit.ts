@@ -6,6 +6,7 @@ interface JustShowItUnitInterface {
   setCreationDate(): void;
   getCreationDate(): Date;
   setParam(index: string, value: string): void;
+  setParams(params: Object): void;
   getParam(index: string): string;
   getParams(): Object;
   addUnit(unit: JustShowItUnit): void;
@@ -93,6 +94,10 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     this.params[index] = value;
   }
   
+  setParams(params: Object): void {
+    this.params = params;
+  }
+  
   getParam(index: string): string {
     return this.params[index];
   }
@@ -129,6 +134,9 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     let bestComponentType = analyze.getBestComponentTypeByParams(this.getParams());
     if (this.availableComponentTypes.indexOf(bestComponentType) > -1) {
       this.setType(bestComponentType);
+      this.setParams(
+        analyze.postProcessParamsByComponentType(this.getParams(), bestComponentType)
+      );
     }
 
     return bestInputType;

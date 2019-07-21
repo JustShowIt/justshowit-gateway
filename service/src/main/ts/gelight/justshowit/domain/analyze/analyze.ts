@@ -98,10 +98,23 @@ export default {
         let bestInputType = AnalyzeValueNet.run(value);
         return bestInputType;
     },
+    postProcessParamsByComponentType (params: Object, componentType: string): Object {
+        let proccessedParams = {};
+
+        console.log("");
+        console.log("========== PARAMS POST PROCESSING (", componentType, ") ===========================");
+        // for (let param in params) {
+        //     console.log(param);
+        // }
+        console.dir(params, { depth: null, colors: true });
+
+        return proccessedParams;
+    },
     async analyzeComponents (json) {
         let justShowItUnit: JustShowItUnit = new JustShowItUnit(json);
         let unitJson = await justShowItUnit.getUnitAsJSON();
         
+        console.log("");
         console.log("========== GENERATED UNIT JSON ==============================");
         console.dir(unitJson, { depth: null, colors: true })
         console.log("");
