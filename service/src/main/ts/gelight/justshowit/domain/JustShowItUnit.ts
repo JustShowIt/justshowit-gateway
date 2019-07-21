@@ -134,9 +134,6 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     let bestComponentType = analyze.getBestComponentTypeByParams(this.getParams());
     if (this.availableComponentTypes.indexOf(bestComponentType) > -1) {
       this.setType(bestComponentType);
-      this.setParams(
-        analyze.postProcessParamsByComponentType(this.getParams(), bestComponentType)
-      );
     }
 
     return bestInputType;
