@@ -103,7 +103,7 @@ export default {
         let unitJson = await justShowItUnit.getUnitAsJSON();
         
         console.log("========== GENERATED UNIT JSON ==============================");
-        console.log(unitJson);
+        console.dir(unitJson, { depth: null, colors: true })
         console.log("");
         
         return unitJson;

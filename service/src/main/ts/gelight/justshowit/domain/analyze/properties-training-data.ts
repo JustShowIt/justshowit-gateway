@@ -1,6 +1,5 @@
 export default [
     { input: ".mp4", output: "url" },
-    { input: ".mp4", output: "video" },
     { input: "www.google.de", output: "url" },
     { input: "www.", output: "url" },
     { input: "http://www.", output: "url" },
