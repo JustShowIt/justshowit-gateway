@@ -22,7 +22,8 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
 
     if (typeof this.json === 'string') {
       
-      this.analyzeStringValue(this.json);
+      this.analyzeBestInputType(this.json);
+      this.analyzeBestComponentType();
 
     } else if (Array.isArray(this.json) && this.json.length) {
       
@@ -36,9 +37,12 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     
   }
 
-  setUuid(uuid: string): void {
+  setUuid(uuid?: string): void {
     if (uuid) {
       this.uuid = uuid;
+    }
+    if (this.uuid !== '' && this.json.hasOwnProperty('id')) {
+      this.uuid = this.json['id'];
     }
     if (this.uuid !== '' && this.json.hasOwnProperty('uuid')) {
       this.uuid = this.json['uuid'];
@@ -53,13 +57,17 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     if (type) {
       this.type = type;
     }
-    if (this.type !== '' && this.json.hasOwnProperty('type')) {
+    if (this.type !== '' && this.isTypeExistsInJson()) {
       this.type = this.json['type'];
     }
   }
   
   getType(): string {
     return this.type;
+  }
+  
+  isTypeExistsInJson(): boolean {
+    return (this.json.hasOwnProperty('type') && this.availableComponentTypes.indexOf(this.json['type']) > -1);
   }
 
   setCreationDate(): void {
@@ -84,6 +92,11 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return this.params[index];
   }
 
+  isParamExists(param: string): boolean {
+    return (this.params[param]);
+  }
+
+
   getParams(): Object {
     return this.params;
   }
@@ -104,21 +117,20 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return unit;
   }
 
-  analyzeStringValue(value: string): string {
-    
-    // Analyzed value to choose the best input type
+  analyzeBestInputType(value: string): string {    
     let bestInputType = analyze.getBestInputTypeByValue(value);
     if (this.availableParams.indexOf(bestInputType) > -1) {
       this.setParam(bestInputType, value);
     }
+    return bestInputType;
+  }
 
-    // Analyzed which is the best component based on defined params 
+  analyzeBestComponentType(): string {
     let bestComponentType = analyze.getBestComponentTypeByParams(this.getParams());
     if (this.availableComponentTypes.indexOf(bestComponentType) > -1) {
       this.setType(bestComponentType);
     }
-
-    return bestInputType;
+    return bestComponentType;
   }
 
   analyzeArrayValue(json: JSON): void {
@@ -129,27 +141,33 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   }
 
   analyzeObjectValue(json: JSON): void {
+    this.setUuid();
+
+    if (this.isTypeExistsInJson()) {
+      this.setType(this.json['type']);
+    }
     
-    // Not implemented yet ...
-
-    // Wenn "uuid" oder "id" Feld vorhanden, dann automatisch setzen. 
-    // Eventuell setUuid() erweitern ...
-
-    //  ... danach ...
-
-    // Allgemein alle Eigenschaften durchlaufen (for Schleife) und: 
-    //  ... 1. getBestInputTypeByValue()
-    //      - aber nur in "params" speichern, wenn der parameter in params noch nicht existiert
+    // Analyzed value to choose the best input type
+    Object.keys(this.json).forEach(index => {
+      if (typeof this.json[index] === 'string') {
+        this.analyzeBestInputType(this.json[index]);
+      } else {
+        this.addUnit(new JustShowItUnit(this.json[index]));
+      }
+    })
+    console.log(this.getParams());
+    this.analyzeBestComponentType();
+    
+    // ... 2. getBestInputTypeByValue()
+    //     - aber nur in "params" speichern, wenn der parameter in params noch nicht existiert
     
     // Wenn "params" Object vorhanden, dann für alle params (for Schleife), die nicht in "availableComponentTypes" existieren: 
-    //  ... 1. getBestInputTypeByValue()
-    //      - aber nur in "params" speichern, wenn der parameter in params noch nicht existiert
-    
-    //  ... danach ...
-    
+    // ... 3. getBestInputTypeByValue()
+    //     - aber nur in "params" speichern, wenn der parameter in params noch nicht existiert
+     
     // Wenn "type" Feld vorhanden UND der angegebene "type" auch in "availableComponentTypes" vorhanden, dann automatisch setzen
-    //  ... andernfalls type analysieren und automatisch setzen lassen.
-    //      - getBestComponentTypeByParams()
+    // ... andernfalls type analysieren und automatisch setzen lassen.
+    //     - anayzeBestComponentTypeByParams()
     
   }
 

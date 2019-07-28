@@ -11,7 +11,8 @@ interface JustShowItUnitInterface {
     getParams(): Object;
     addUnit(unit: JustShowItUnitInterface): void;
     getUnitAsJSON(): JSON;
-    analyzeStringValue(value: string): void;
+    analyzeBestInputType(value: string): void;
+    analyzeBestComponentType(): string;
     analyzeArrayValue(json: JSON): void;
     analyzeObjectValue(json: JSON): void;
   }
