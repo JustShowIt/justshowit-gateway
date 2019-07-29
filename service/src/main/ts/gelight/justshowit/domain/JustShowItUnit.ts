@@ -26,7 +26,6 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
       this.analyzeBestComponentType();
 
     } else if (Array.isArray(this.json) && this.json.length) {
-      
       this.analyzeArrayValue(this.json);
 
     } else if (typeof this.json === 'object' && Object.keys(this.json).length) {
@@ -136,7 +135,9 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   analyzeArrayValue(json: JSON): void {
     this.setType('list');
     for (let index in json) {
-      this.addUnit(new JustShowItUnit(json[index]));
+      if (json[index].length || Object.keys(json[index]).length) {
+        this.addUnit(new JustShowItUnit(json[index]));
+      }
     }
   }
 
@@ -147,27 +148,20 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
       this.setType(this.json['type']);
     }
     
-    // Analyzed value to choose the best input type
     Object.keys(this.json).forEach(index => {
       if (typeof this.json[index] === 'string') {
         this.analyzeBestInputType(this.json[index]);
       } else {
-        this.addUnit(new JustShowItUnit(this.json[index]));
+        if (Object.keys(this.json[index]).length > 0) {
+          this.addUnit(new JustShowItUnit(this.json[index]));
+        }
       }
     })
-    console.log(this.getParams());
+
     this.analyzeBestComponentType();
     
-    // ... 2. getBestInputTypeByValue()
-    //     - aber nur in "params" speichern, wenn der parameter in params noch nicht existiert
-    
-    // Wenn "params" Object vorhanden, dann für alle params (for Schleife), die nicht in "availableComponentTypes" existieren: 
-    // ... 3. getBestInputTypeByValue()
-    //     - aber nur in "params" speichern, wenn der parameter in params noch nicht existiert
-     
-    // Wenn "type" Feld vorhanden UND der angegebene "type" auch in "availableComponentTypes" vorhanden, dann automatisch setzen
-    // ... andernfalls type analysieren und automatisch setzen lassen.
-    //     - anayzeBestComponentTypeByParams()
+    // Offener Punkt:
+    //    Was passiert mit Parametern, die nicht genutzt werden können weil doppelt vorhanden etc..?
     
   }
 
