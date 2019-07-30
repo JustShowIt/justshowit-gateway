@@ -32,9 +32,8 @@ export default {
 
         return matchedComponent;
     },
-    getBestInputTypeByValue (value: string): string {
-        let bestInputType = AnalyzeValueNet.run(value);
-        return bestInputType;
+    getBestInputTypeByValue (value: string | number): string {
+        return AnalyzeValueNet.run(value);
     },
     async analyzeComponents (json) {
         let justShowItUnit: JustShowItUnit = new JustShowItUnit(json);

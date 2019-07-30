@@ -20,17 +20,18 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     this.setUuid(uuidv1());
     this.setCreationDate();
 
-    if (typeof this.json === 'string') {
+    if (typeof this.json === 'string' || typeof this.json === 'number') {
       
-      this.analyzeBestInputType(this.json);
+      this.setParam(analyze.getBestInputTypeByValue(this.json), this.json);
       this.analyzeBestComponentType();
 
     } else if (Array.isArray(this.json) && this.json.length) {
-      this.analyzeArrayValue(this.json);
+      
+      this.analyzeArray(this.json);
 
     } else if (typeof this.json === 'object' && Object.keys(this.json).length) {
 
-      this.analyzeObjectValue(this.json);
+      this.analyzeObject(this.json);
 
     }
     
@@ -80,7 +81,9 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   }
 
   setParam(index: string, value: string): void {
-    this.params[index] = value;
+    if (!this.params[index] && this.availableParams.indexOf(index) != -1) {
+      this.params[index] = value;
+    }
   }
   
   setParams(params: Object): void {
@@ -116,14 +119,6 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return unit;
   }
 
-  analyzeBestInputType(value: string): string {    
-    let bestInputType = analyze.getBestInputTypeByValue(value);
-    if (this.availableParams.indexOf(bestInputType) > -1) {
-      this.setParam(bestInputType, value);
-    }
-    return bestInputType;
-  }
-
   analyzeBestComponentType(): string {
     let bestComponentType = analyze.getBestComponentTypeByParams(this.getParams());
     if (this.availableComponentTypes.indexOf(bestComponentType) > -1) {
@@ -132,16 +127,21 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return bestComponentType;
   }
 
-  analyzeArrayValue(json: JSON): void {
+  analyzeArray(json: JSON): void {
     this.setType('list');
-    for (let index in json) {
-      if (json[index].length || Object.keys(json[index]).length) {
-        this.addUnit(new JustShowItUnit(json[index]));
+    if (Object.keys(json).length) {
+      for (let index in json) {
+        if (Object.keys(json[index]).length) {
+          this.addUnit(new JustShowItUnit(json[index]));
+        }
       }
     }
   }
 
-  analyzeObjectValue(json: JSON): void {
+  analyzeObject(json: JSON): void {
+    console.log("===== OBJECT =====");
+    console.dir(json, { depth: null, colors: true });
+
     this.setUuid();
 
     if (this.isTypeExistsInJson()) {
@@ -149,19 +149,25 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     }
     
     Object.keys(this.json).forEach(index => {
-      if (typeof this.json[index] === 'string') {
-        this.analyzeBestInputType(this.json[index]);
+      
+      if (typeof this.json[index] === 'string' || typeof this.json[index] === 'number') {
+        // let bestInputType = analyze.getBestInputTypeByValue(this.json[index]);
+        // this.setParam(bestInputType, this.json[index]);this.json[index]
       } else {
-        if (Object.keys(this.json[index]).length > 0) {
-          this.addUnit(new JustShowItUnit(this.json[index]));
-        }
+        this.addUnit(new JustShowItUnit(this.json[index]));
       }
-    })
 
-    this.analyzeBestComponentType();
+    });
+
+    console.log("__________________________________________________");
     
+    let best = this.analyzeBestComponentType();
+    console.log(best);
+    console.log(this.getParams());
+
     // Offener Punkt:
-    //    Was passiert mit Parametern, die nicht genutzt werden können weil doppelt vorhanden etc..?
+    //    Was passiert mit Parametern, die nicht genutzt werden können weil 
+    //    z.B. doppelt vorhanden etc..?
     
   }
 
