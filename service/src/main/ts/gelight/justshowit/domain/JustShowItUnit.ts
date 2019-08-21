@@ -140,7 +140,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
 
   analyzeObject(json: JSON): void {
     console.log("===== OBJECT =====");
-    console.dir(json, { depth: null, colors: true });
+    // console.dir(json, { depth: null, colors: true });
 
     this.setUuid();
 
@@ -149,20 +149,16 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     }
     
     Object.keys(this.json).forEach(index => {
-      
       if (typeof this.json[index] === 'string' || typeof this.json[index] === 'number') {
-        // let bestInputType = analyze.getBestInputTypeByValue(this.json[index]);
-        // this.setParam(bestInputType, this.json[index]);this.json[index]
+        let bestInputType = analyze.getBestInputTypeByValue(this.json[index]);
+        this.setParam(bestInputType, this.json[index]);
       } else {
         this.addUnit(new JustShowItUnit(this.json[index]));
       }
-
     });
-
-    console.log("__________________________________________________");
     
-    let best = this.analyzeBestComponentType();
-    console.log(best);
+    let bestComponentType = this.analyzeBestComponentType();
+    this.setType(bestComponentType);
     console.log(this.getParams());
 
     // Offener Punkt:
