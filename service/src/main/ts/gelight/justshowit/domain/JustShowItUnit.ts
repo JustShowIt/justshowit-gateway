@@ -13,20 +13,21 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   private creationDate: Date = new Date();
   private params: Object = {};
   private units: JustShowItUnit[] = [];
-  
+
   constructor(json: JSON) {
     this.json = json;
-    
+
     this.setUuid(uuidv1());
     this.setCreationDate();
 
+    // console.log(this.json)
+
     if (typeof this.json === 'string' || typeof this.json === 'number') {
-      
       this.setParam(analyze.getBestInputTypeByValue(this.json), this.json);
       this.analyzeBestComponentType();
 
     } else if (Array.isArray(this.json) && this.json.length) {
-      
+
       this.analyzeArray(this.json);
 
     } else if (typeof this.json === 'object' && Object.keys(this.json).length) {
@@ -34,7 +35,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
       this.analyzeObject(this.json);
 
     }
-    
+
   }
 
   setUuid(uuid?: string): void {
@@ -48,25 +49,22 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
       this.uuid = this.json['uuid'];
     }
   }
-  
+
   getUuid(): string {
     return this.uuid;
   }
 
-  setType(type?: string): void {
-    if (type) {
-      this.type = type;
-    }
-    if (this.type !== '' && this.isTypeExistsInJson()) {
+  setType(type: string): void {
+    if (this.type !== '' && this.isTypeExists()) {
       this.type = this.json['type'];
     }
   }
-  
+
   getType(): string {
     return this.type;
   }
-  
-  isTypeExistsInJson(): boolean {
+
+  isTypeExists(): boolean {
     return (this.json.hasOwnProperty('type') && this.availableComponentTypes.indexOf(this.json['type']) > -1);
   }
 
@@ -75,7 +73,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
       this.creationDate = this.json['creationDate'];
     }
   }
-  
+
   getCreationDate(): Date {
     return this.creationDate;
   }
@@ -85,11 +83,11 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
       this.params[index] = value;
     }
   }
-  
+
   setParams(params: Object): void {
     this.params = params;
   }
-  
+
   getParam(index: string): string {
     return this.params[index];
   }
@@ -98,7 +96,6 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return (this.params[param]);
   }
 
-
   getParams(): Object {
     return this.params;
   }
@@ -106,7 +103,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   addUnit(unit: JustShowItUnit): void {
     this.units.push(unit);
   }
-  
+
   getUnitAsJSON(): JSON {
     let unit: any = {
       id: this.getUuid(),
@@ -139,32 +136,47 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   }
 
   analyzeObject(json: JSON): void {
-    console.log("===== OBJECT =====");
-    // console.dir(json, { depth: null, colors: true });
-
     this.setUuid();
 
-    if (this.isTypeExistsInJson()) {
+    if (this.json['type']) {
       this.setType(this.json['type']);
     }
-    
+
     Object.keys(this.json).forEach(index => {
-      if (typeof this.json[index] === 'string' || typeof this.json[index] === 'number') {
-        let bestInputType = analyze.getBestInputTypeByValue(this.json[index]);
-        this.setParam(bestInputType, this.json[index]);
-      } else {
-        this.addUnit(new JustShowItUnit(this.json[index]));
+      if (index === 'units') {
+        this.generateObjectUnit(this.json['units']);
+      } else if (index !== 'id' && index !== 'type' && index !== 'currentDate') {
+        console.log(index, this.json[index])
+        this.analyzeBestPropertyTypeByValue(this.json[index]);
       }
-    });
-    
+    })
+
+    // Solange keine Params existieren, kann auch keine passende Komponente gefunden werden
+    // Params immer als LISTE setzen ...
     let bestComponentType = this.analyzeBestComponentType();
     this.setType(bestComponentType);
-    console.log(this.getParams());
+    // console.log(this.getParams());
 
-    // Offener Punkt:
-    //    Was passiert mit Parametern, die nicht genutzt werden können weil 
-    //    z.B. doppelt vorhanden etc..?
-    
+  }
+
+  generateObjectUnit(units: JSON) {
+    Object.keys(units).forEach(index => {
+      let unit = units[index];
+      if (typeof unit === 'string' || typeof unit === 'number') {
+        let json: any = { text: unit };
+        this.addUnit(new JustShowItUnit(json));
+      } else {
+        this.addUnit(new JustShowItUnit(unit));
+      }
+    });
+  }
+
+  analyzeBestPropertyTypeByValue(value: string) {
+    if (typeof value === 'string' || typeof value === 'number') {
+      let bestType = analyze.getBestInputTypeByValue(value);
+      console.log("analyzeBestPropertyTypeByValue", value, bestType)
+      this.setType(bestType);
+    }
   }
 
 }

@@ -6,6 +6,6 @@ export default [
     { input: "https://www.", output: "url" },
     { input: "abcdefghijklimopqrstuvwxyz", output: "text" },
     { input: "01234564789", output: "text" },
-    { input: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.", output: "text" },
+    { input: "Lorem ipsum dolor sit amet, consetetur sadipscing aliquyam erat, sed diam voluptua.", output: "text" },
     { input: "Muh sagt die Kuh", output: "text" }
 ];
