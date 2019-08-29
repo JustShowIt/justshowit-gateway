@@ -19,23 +19,27 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
 
     this.setUuid(uuidv1());
     this.setCreationDate();
-
-    // console.log(this.json)
-
-    if (typeof this.json === 'string' || typeof this.json === 'number') {
-      this.setParam(analyze.getBestInputTypeByValue(this.json), this.json);
-      this.analyzeBestComponentType();
-
-    } else if (Array.isArray(this.json) && this.json.length) {
-
-      this.analyzeArray(this.json);
-
-    } else if (typeof this.json === 'object' && Object.keys(this.json).length) {
-
+    this.dispatch();
+  }
+  
+  dispatch() {
+    if (this.isArray(this.json)) {
+      this.generateChildUnits(this.json);
+    } else if (this.isObject(this.json)) {
       this.analyzeObject(this.json);
-
     }
+  }
 
+  isStringOrNumber(value: string|Number) {
+    return (typeof value === 'string' || typeof value === 'number');
+  }
+  
+  isArray(json: any): boolean {
+    return (Array.isArray(json) && json.length > 0);
+  }
+
+  isObject(json: any): boolean {
+    return (typeof json === 'object' && Object.keys(json).length > 0);
   }
 
   setUuid(uuid?: string): void {
@@ -55,6 +59,9 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   }
 
   setType(type: string): void {
+    if (type) {
+      this.type = type;
+    }
     if (this.type !== '' && this.isTypeExists()) {
       this.type = this.json['type'];
     }
@@ -124,7 +131,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return bestComponentType;
   }
 
-  analyzeArray(json: JSON): void {
+  generateChildUnits(json: JSON): void {
     this.setType('list');
     if (Object.keys(json).length) {
       for (let index in json) {
@@ -157,6 +164,12 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     this.setType(bestComponentType);
     // console.log(this.getParams());
 
+
+    // Wenn property ein string...
+    // this.setParam(analyze.getBestInputTypeByValue(this.json), this.json);
+    // this.analyzeBestComponentType();
+
+
   }
 
   generateObjectUnit(units: JSON) {
@@ -174,7 +187,6 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   analyzeBestPropertyTypeByValue(value: string) {
     if (typeof value === 'string' || typeof value === 'number') {
       let bestType = analyze.getBestInputTypeByValue(value);
-      console.log("analyzeBestPropertyTypeByValue", value, bestType)
       this.setType(bestType);
     }
   }
