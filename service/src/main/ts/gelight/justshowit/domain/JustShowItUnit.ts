@@ -86,8 +86,11 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   }
 
   setParam(index: string, value: string): void {
-    if (!this.params[index] && this.availableParams.indexOf(index) != -1) {
-      this.params[index] = value;
+    if (this.availableParams.indexOf(index) != -1) {
+      if (!this.params[index]) {
+        this.params[index] = [];
+      }
+      this.params[index].push(value);
     }
   }
 
@@ -95,7 +98,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     this.params = params;
   }
 
-  getParam(index: string): string {
+  getParam(index: string): Array<string> {
     return this.params[index];
   }
 
@@ -123,7 +126,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return unit;
   }
 
-  analyzeBestComponentType(): string {
+  getBestComponentType(): string {
     let bestComponentType = analyze.getBestComponentTypeByParams(this.getParams());
     if (this.availableComponentTypes.indexOf(bestComponentType) > -1) {
       this.setType(bestComponentType);
@@ -145,29 +148,24 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
   analyzeObject(json: JSON): void {
     this.setUuid();
 
-    if (this.json['type']) {
-      this.setType(this.json['type']);
-    }
-
     Object.keys(this.json).forEach(index => {
       if (index === 'units') {
         this.generateObjectUnit(this.json['units']);
       } else if (index !== 'id' && index !== 'type' && index !== 'currentDate') {
-        console.log(index, this.json[index])
-        this.analyzeBestPropertyTypeByValue(this.json[index]);
+        this.getBestPropertyType(this.json[index]);
       }
     })
 
     // Solange keine Params existieren, kann auch keine passende Komponente gefunden werden
     // Params immer als LISTE setzen ...
-    let bestComponentType = this.analyzeBestComponentType();
+    let bestComponentType = this.getBestComponentType();
     this.setType(bestComponentType);
     // console.log(this.getParams());
 
 
     // Wenn property ein string...
     // this.setParam(analyze.getBestInputTypeByValue(this.json), this.json);
-    // this.analyzeBestComponentType();
+    // this.getBestComponentType();
 
 
   }
@@ -184,10 +182,11 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     });
   }
 
-  analyzeBestPropertyTypeByValue(value: string) {
+  getBestPropertyType(value: string) {
     if (typeof value === 'string' || typeof value === 'number') {
       let bestType = analyze.getBestInputTypeByValue(value);
-      this.setType(bestType);
+      console.log("Param >>>", bestType, ">>>", value);
+      this.setParam(bestType, value);
     }
   }
 

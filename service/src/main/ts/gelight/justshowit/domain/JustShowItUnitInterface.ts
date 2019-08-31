@@ -8,14 +8,14 @@ interface JustShowItUnitInterface {
   getCreationDate(): Date;
   setParam(index: string, value: string): void;
   setParams(params: Object): void;
-  getParam(index: string): string;
+  getParam(index: string): Array<string>;
   getParams(): Object;
   isStringOrNumber(value: string|Number): Boolean;
   isArray(json: any): Boolean;
   isObject(json: any): Boolean;
   addUnit(unit: JustShowItUnitInterface): void;
   getUnitAsJSON(): JSON;
-  analyzeBestComponentType(): string;
+  getBestComponentType(): string;
   generateChildUnits(json: JSON): void;
   analyzeObject(json: JSON): void;
 }
