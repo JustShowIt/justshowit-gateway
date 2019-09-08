@@ -2,6 +2,9 @@ import ServiceConfig from "./service-config";
 import express from "express";
 import router from "./router";
 
+import db from "./main/ts/gelight/justshowit/infrastructure/db/sequalize.js";
+db.connect();
+
 import analyze from "./main/ts/gelight/justshowit/domain/analyze/analyze";
 analyze.init();
 

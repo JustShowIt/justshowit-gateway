@@ -5,9 +5,19 @@ docker-compose exec gateway sh
 ```
 
 ```yaml
-version: "3.6"
+version: "3.3"
 
 services:
+
+  db:
+    image: postgres:10-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "justshowit"
 
   dataservice:
     build: justshowit-data-service-example
@@ -24,7 +34,7 @@ services:
       - 9000:9000
     volumes:
       - ./justshowit-gateway/service/src:/app/src
-      # - ./justshowit-gateway/frontend/dist:/app/frontend
     depends_on:
       - dataservice
+      - db
 ```

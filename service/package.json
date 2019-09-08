@@ -11,13 +11,15 @@
     "build": "tsc"
   },
   "dependencies": {
-    "node-watch": "^0.6.2",
     "brain.js": "^1.6.1",
     "express": "^4.17.1",
     "log4js": "^4.4.0",
-    "orm": "^5.0.2",
+    "node-watch": "^0.6.2",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "sequelize": "^5.18.3",
     "typescript-log": "^1.1.0",
     "uuid": "^3.3.2"
   },
