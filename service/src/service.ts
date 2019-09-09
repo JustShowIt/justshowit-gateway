@@ -4,6 +4,7 @@ import router from "./router";
 
 import db from "./main/ts/gelight/justshowit/infrastructure/db/sequalize.js";
 db.connect();
+db.createTables();
 
 import analyze from "./main/ts/gelight/justshowit/domain/analyze/analyze";
 analyze.init();
