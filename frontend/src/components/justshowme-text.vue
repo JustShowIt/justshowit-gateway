@@ -1,5 +1,6 @@
 <template>
-  <div class="justshowme-text" v-bind:class="{ hide: this.hasParams() }" v-on:click="addInputTypeTrainingData()">
+  <div class="justshowme-text" v-bind:class="{ hide: this.hasParams() }">
+    <justshowme-training></justshowme-training>
     {{getParams().text}}
     <justshowme v-for="childUnit in unit.units" :key="childUnit.id" :unit="childUnit" />
   </div>
@@ -7,10 +8,14 @@
 
 <script>
 import justshowmeComponentMixin from '@/mixins/justshowmeComponentMixin'
+import justshowmeTraining from '@/components/justshowme-training'
 
 export default {
   mixins: [ justshowmeComponentMixin ],
-  name: 'justshowme-text'
+  name: 'justshowme-text',
+  components: {
+    justshowmeTraining
+  }
 }
 </script>
 

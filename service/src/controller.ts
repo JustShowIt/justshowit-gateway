@@ -83,10 +83,8 @@ export default {
     async addInputTypeTrainingData (req, res) {
         
         // let sequelize = db.connect();
-        let value = req.body;
-        
+        let value = req.body.value;
         console.log(value);
-        // console.log(sequelize);
 
         res.json({});
         res.end();

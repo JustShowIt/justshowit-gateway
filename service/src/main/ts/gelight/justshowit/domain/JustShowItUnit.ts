@@ -5,7 +5,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
 
   private json: JSON;
 
-  private availableComponentTypes: Array<string> = ["list", "text", "video", "link", "image", "article" ];
+  private availableComponentTypes: Array<string> = ["list", "text", "video", "link", "image", "article"];
   private availableParams: Array<string> = ["text", "title", "description", "url", "resolution", "runtime", "size", "author"];
 
   private uuid: string = '';

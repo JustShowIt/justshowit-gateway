@@ -28,10 +28,10 @@ export default {
         hasUnits () {
             return (this.unit.hasUnits)
         },
-        addInputTypeTrainingData () {
+        addInputTypeTrainingData (value) {
             const url = justshowme.gateway + justshowme.addInputTypeTrainingDataPath
             return axios.post(url, {
-                value: 'value test'
+                value: value
             })
         }
     }

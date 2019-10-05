@@ -3,6 +3,7 @@
       v-bind:class="{ hide: this.hasParams() }"
       v-bind:href="url"
   >
+    <justshowme-training></justshowme-training>
     {{title}}
     <justshowme v-for="childUnit in unit.units" :key="childUnit.id" :unit="childUnit" />
   </a>
@@ -10,10 +11,14 @@
 
 <script>
 import justshowmeComponentMixin from '@/mixins/justshowmeComponentMixin'
+import justshowmeTraining from '@/components/justshowme-training'
 
 export default {
   mixins: [ justshowmeComponentMixin ],
   name: 'justshowme-link',
+  components: {
+    justshowmeTraining
+  },
   computed: {
     url () {
       if (this.hasParam('url')) {
