@@ -37,6 +37,7 @@
   "justshowme": {
     "gateway": "http://localhost:9000",
     "dataPath": "/justshowme",
+    "addInputTypeTrainingDataPath": "/add-input-type-training-data",
     "header": "justshowme-service-request-uri"
   }
 }

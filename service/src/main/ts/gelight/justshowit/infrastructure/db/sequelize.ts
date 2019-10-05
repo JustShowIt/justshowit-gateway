@@ -6,6 +6,7 @@ const sequelize = new Sequelize('justshowit', 'postgres', 'postgres', {
 });
 
 export default {
+  
   connect () {
     return sequelize
       .authenticate()
@@ -16,6 +17,7 @@ export default {
         console.error('Unable to connect to the database:', err);
       });
   },
+  
   createTables () {
     
     let propertiesTrainingData = sequelize.define('properties-training-data', {

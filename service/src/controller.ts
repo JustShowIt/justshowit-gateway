@@ -3,6 +3,7 @@ import ServiceConfig from "./service-config";
 import request from "request-promise";
 import * as fs from 'fs';
 import * as path from 'path';
+// import db from "./main/ts/gelight/justshowit/infrastructure/db/sequelize.js";
 
 export default {
     
@@ -77,6 +78,19 @@ export default {
             });
         }
 
+    },
+
+    async addInputTypeTrainingData (req, res) {
+        
+        // let sequelize = db.connect();
+        let value = req.body;
+        
+        console.log(value);
+        // console.log(sequelize);
+
+        res.json({});
+        res.end();
+        
     }
 
 }

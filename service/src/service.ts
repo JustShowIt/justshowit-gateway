@@ -1,8 +1,9 @@
 import ServiceConfig from "./service-config";
 import express from "express";
+import bodyParser from 'body-parser';
 import router from "./router";
 
-import db from "./main/ts/gelight/justshowit/infrastructure/db/sequalize.js";
+import db from "./main/ts/gelight/justshowit/infrastructure/db/sequelize.js";
 db.connect();
 db.createTables();
 
@@ -11,6 +12,12 @@ analyze.init();
 
 const app = express();
 app.use(express.static(ServiceConfig.justshowitUiBaseApplicationPath));
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 router(app);
 

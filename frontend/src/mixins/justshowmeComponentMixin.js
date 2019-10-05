@@ -1,3 +1,6 @@
+import axios from 'axios'
+import { justshowme } from '../../package.json'
+
 export default {
     props: {
         unit: {
@@ -23,7 +26,13 @@ export default {
             return this.getParam(param) ? true : false
         },
         hasUnits () {
-          return (this.unit.hasUnits)
+            return (this.unit.hasUnits)
+        },
+        addInputTypeTrainingData () {
+            const url = justshowme.gateway + justshowme.addInputTypeTrainingDataPath
+            return axios.post(url, {
+                value: 'value test'
+            })
         }
     }
 }

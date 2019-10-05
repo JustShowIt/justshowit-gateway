@@ -1,5 +1,5 @@
 <template>
-  <div class="justshowme-text" v-bind:class="{ hide: this.hasParams() }">
+  <div class="justshowme-text" v-bind:class="{ hide: this.hasParams() }" v-on:click="addInputTypeTrainingData()">
     {{getParams().text}}
     <justshowme v-for="childUnit in unit.units" :key="childUnit.id" :unit="childUnit" />
   </div>
