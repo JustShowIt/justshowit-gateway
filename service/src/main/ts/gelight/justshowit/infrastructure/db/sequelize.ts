@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
+import propertiesTrainingData from "./models/properties-training-data";
+console.log(propertiesTrainingData);
 
-const sequelize = new Sequelize('justshowit', 'postgres', 'postgres', {
+const db = new Sequelize('justshowit', 'postgres', 'postgres', {
   host: 'db',
   dialect: 'postgres'
 });
@@ -8,29 +10,20 @@ const sequelize = new Sequelize('justshowit', 'postgres', 'postgres', {
 export default {
   
   connect () {
-    return sequelize
-      .authenticate()
+    return db.authenticate()
       .then(() => {
         console.log('Connection has been established successfully.');
       })
       .catch(err => {
         console.error('Unable to connect to the database:', err);
+      })
+      .finally(() => {
+        db.close();
       });
   },
   
-  createTables () {
-    
-    let propertiesTrainingData = sequelize.define('properties-training-data', {
-      input: { type: Sequelize.STRING, allowNull: false },
-      output: { type: Sequelize.STRING, allowNull: true }
-    }, {});
-
-    propertiesTrainingData.sync({ force: true }).then(() => {
-      return propertiesTrainingData.create({
-        input: 'http://www.',
-        output: 'url'
-      });
-    });
-
+  createTables (): void {
+    //propertiesTrainingData(Sequelize);
   }
+
 }

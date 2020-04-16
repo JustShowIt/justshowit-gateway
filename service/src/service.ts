@@ -3,9 +3,9 @@ import express from "express";
 import bodyParser from 'body-parser';
 import router from "./router";
 
-import db from "./main/ts/gelight/justshowit/infrastructure/db/sequelize.js";
+
+import db from "./main/ts/gelight/justshowit/infrastructure/db/sequelize";
 db.connect();
-db.createTables();
 
 import analyze from "./main/ts/gelight/justshowit/domain/analyze/analyze";
 analyze.init();
