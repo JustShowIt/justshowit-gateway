@@ -3,7 +3,6 @@ import express from "express";
 import bodyParser from 'body-parser';
 import router from "./router";
 
-
 import db from "./main/ts/gelight/justshowit/infrastructure/db/sequelize";
 db.connect();
 

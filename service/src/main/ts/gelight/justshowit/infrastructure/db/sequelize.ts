@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
-import propertiesTrainingData from "./models/properties-training-data";
-console.log(propertiesTrainingData);
+// import propertiesTrainingData from "./models/properties-training-data";
 
 const db = new Sequelize('justshowit', 'postgres', 'postgres', {
   host: 'db',
