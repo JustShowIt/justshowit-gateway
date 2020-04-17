@@ -34,6 +34,7 @@ services:
       - 9000:9000
     volumes:
       - ./justshowit-gateway/service/src:/app/src
+      - ./justshowit-gateway/service/src:/app/src
     depends_on:
       - dataservice
       - db

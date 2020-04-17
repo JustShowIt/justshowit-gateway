@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import JustShowItUnit from './../JustShowItUnit';
 import analyzeUtils from './analyze-utils';
 
@@ -12,6 +14,10 @@ export default {
     init () {
         AnalyzeInputNet.train(trainingData, { iterations: 20000 });
         AnalyzeValueNet.train(propertiesTrainingData, { iterations: 100 });
+
+        const TrainedAnalyzeInputNetUrl = path.join(__dirname, 'trained-networks', 'TrainedAnalyzeInputNet.json');
+        fs.writeFileSync(TrainedAnalyzeInputNetUrl, AnalyzeInputNet.toJSON());
+        console.log(TrainedAnalyzeInputNetUrl);
 
         console.info("Neuronal Networks has been trained.");
     },
