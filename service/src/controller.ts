@@ -80,12 +80,6 @@ export default {
 
     },
 
-    async saveTrainedNetworks (req, res) {
-
-        
-
-    },
-
     async addInputTypeTrainingData (req, res) {
         
         // let sequelize = db.connect();

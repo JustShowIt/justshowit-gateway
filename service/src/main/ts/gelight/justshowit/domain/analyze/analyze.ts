@@ -10,17 +10,35 @@ import propertiesTrainingData from './properties-training-data';
 const AnalyzeInputNet = new brain.NeuralNetwork({ hiddenLayers: [3] });
 const AnalyzeValueNet = new brain.recurrent.LSTM();
 
+const saveTrainedNatworks = () => {
+    const trainedNetworksDirectory = 'trained-networks';
+
+    const TrainedAnalyzeInputNetDirectory = path.join(__dirname, trainedNetworksDirectory, 'TrainedAnalyzeInputNet.json');
+    fs.exists(TrainedAnalyzeInputNetDirectory, (exists) => {
+        if (!exists) {
+            fs.writeFileSync(path.join(__dirname, trainedNetworksDirectory, 'TrainedAnalyzeInputNet.json'), JSON.stringify(AnalyzeInputNet.toJSON()));
+        }
+    });
+    
+    const TrainedAnalyzeValueNetDirectory = path.join(__dirname, trainedNetworksDirectory, 'TrainedAnalyzeValueNet.json');
+    fs.exists(TrainedAnalyzeValueNetDirectory, (exists) => {
+        if (!exists) {
+            fs.writeFileSync(path.join(__dirname, trainedNetworksDirectory, 'TrainedAnalyzeValueNet.json'), JSON.stringify(AnalyzeValueNet.toJSON()));
+        }
+    });
+}
+
 export default {
+    
     init () {
         AnalyzeInputNet.train(trainingData, { iterations: 20000 });
         AnalyzeValueNet.train(propertiesTrainingData, { iterations: 100 });
 
-        const TrainedAnalyzeInputNetUrl = path.join(__dirname, 'trained-networks', 'TrainedAnalyzeInputNet.json');
-        fs.writeFileSync(TrainedAnalyzeInputNetUrl, AnalyzeInputNet.toJSON());
-        console.log(TrainedAnalyzeInputNetUrl);
-
+        saveTrainedNatworks();
+        
         console.info("Neuronal Networks has been trained.");
     },
+    
     getBestComponentTypeByParams (params: Object): string {
         let output: Array<Float32Array> = AnalyzeInputNet.run(
             analyzeUtils.convertParamsToRunData(params)
@@ -38,9 +56,11 @@ export default {
 
         return matchedComponent;
     },
+    
     getBestInputTypeByValue (value: string | number): string {
         return AnalyzeValueNet.run(value);
     },
+    
     async analyzeComponents (json) {
         let justShowItUnit: JustShowItUnit = new JustShowItUnit(json);
         let unitJson = await justShowItUnit.getUnitAsJSON();
@@ -52,4 +72,5 @@ export default {
         
         return unitJson;
     }
+
 }

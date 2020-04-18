@@ -17,7 +17,7 @@
     "node-watch": "^0.6.2",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "request-promise": "^4.2.4",
     "sequelize": "^5.18.3",
     "typescript-log": "^1.1.0",
