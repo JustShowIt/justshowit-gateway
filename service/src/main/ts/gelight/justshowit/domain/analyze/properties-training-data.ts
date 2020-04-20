@@ -20,6 +20,10 @@ export default [
         output: "url"
     },
     {
+        input: ".html",
+        output: "url"
+    },
+    {
         input: "abcdefghijklimopqrstuvwxyz",
         output: "text"
     },

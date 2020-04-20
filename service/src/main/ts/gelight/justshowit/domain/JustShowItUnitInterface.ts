@@ -17,5 +17,5 @@ interface JustShowItUnitInterface {
   getUnitAsJSON(): JSON;
   getBestComponentType(): string;
   generateChildUnits(json: JSON): void;
-  analyzeObject(json: JSON): void;
+  assembleUnitParams(json: JSON): void;
 }

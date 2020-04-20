@@ -31,8 +31,10 @@ const saveTrainedNatworks = () => {
 export default {
     
     init () {
+
+        console.log("Training of neuronal networks startet.");
         AnalyzeInputNet.train(trainingData, { iterations: 20000 });
-        AnalyzeValueNet.train(propertiesTrainingData, { iterations: 100 });
+        AnalyzeValueNet.train(propertiesTrainingData, { iterations: 2000 });
 
         saveTrainedNatworks();
         

@@ -27,7 +27,7 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     if (this.isArray(this.json)) {
       this.generateChildUnits(this.json);
     } else if (this.isObject(this.json)) {
-      this.analyzeObject(this.json);
+      this.assembleUnitParams(this.json);
     }
   }
   
@@ -50,23 +50,40 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     return (typeof json === 'object' && Object.keys(json).length > 0);
   }
 
-  analyzeObject(json: JSON): void {
+  assembleUnitParams(json: JSON): void {
     this.setUuid();
+
+    console.log("===== AANALYZE JSON ==============================================");
+    console.log("");
+    console.log(Object.keys(this.json));
+    console.log("");
 
     Object.keys(this.json).forEach(index => {
       if (index === 'units') {
         this.generateObjectUnit(this.json['units']);
-      } else if (index !== 'id' && index !== 'type' && index !== 'currentDate') {
+      } else if (!this.isMetaParam(index)) {
         this.getBestPropertyType(this.json[index]);
       }
     })
 
+    /**
+      REST bilden und als neue UNIT als Children hinzufügen
+      Analyse jedes einzelnen Param-Typ
+
+      Wichtig: Der beste typ für diese Unit darf erst dann berechnet werden, 
+      wenn die Parameter feststehen.
+      console.log(this.getParams());
+      */
     // Solange keine Params existieren, kann auch keine passende Komponente gefunden werden
     // Params immer als LISTE setzen ...
+    
     let bestComponentType = this.getBestComponentType();
-    this.setType(bestComponentType);
-    // console.log(this.getParams());
-
+    // this.setType(bestComponentType);
+    console.log("bestComponentType", bestComponentType);
+    
+    console.log("");
+    console.log("Generated Unit Params:");
+    console.log(this.getParams());
 
     // Wenn property ein string...
     // this.setParam(analyze.getBestInputTypeByValue(this.json), this.json);
@@ -98,10 +115,21 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
     });
   }
 
+  isMetaParam(param: String) {
+    return (param === 'id' || param === 'type' || param === 'currentDate');
+  }
+
+  addUnit(unit: JustShowItUnit): void {
+    this.units.push(unit);
+  }
+
   getBestPropertyType(value: string) {
-    if (typeof value === 'string' || typeof value === 'number') {
+    if (this.isStringOrNumber(value)) {
       let bestType = analyze.getBestInputTypeByValue(value);
       console.log("Param >>>", bestType, ">>>", value);
+      if (this.availableParams.indexOf(bestType) > -1) {
+        this.setType('text');
+      }
       this.setParam(bestType, value);
     }
   }
@@ -156,10 +184,6 @@ export default class JustShowItUnit implements JustShowItUnitInterface {
 
   isParamExists(param: string): boolean {
     return (this.params[param]);
-  }
-
-  addUnit(unit: JustShowItUnit): void {
-    this.units.push(unit);
   }
 
   getUnitAsJSON(): JSON {
